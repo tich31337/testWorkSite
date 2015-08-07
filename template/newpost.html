@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Отчет
+{% endblock title %}
+{% block content %}
+
+<!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
+<!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
+<h3>Происшествия:</h3>
+{% if faults|length %}
+    <table border="0" class="large-12">
+        <col width="125">
+        <col width="20">
+        <col width="200">
+        <col width="150">
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Система</th>
+        <th>Объект</th>
+        <th>Описание</th>
+        <!-- <th>Пользователь</th> -->
+        {% for fault in faults %}
+            <tr>
+                <td>{{fault.fault_time|date:'d E y г.'}}</td>
+                <td>{{fault.fault_time|date:'H:i'}}</td>
+                <td>{{fault.f_system}}</td>
+                <td>{{fault.s_object}}</td>
+                <td>{{fault.description}}</td> 
+                <!-- <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td> -->
+            </tr>
+            {% if forloop.last %}
+                <tr><td colspan="5">Происшествий: {{forloop.counter}}</td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endif %}
+
+<div>
+    <form action="/addpost/" method="post">
+        {% csrf_token %}
+        {% if postid %}
+            <input type="text" name="postid" value="{{postid}}">
+            <input type="datetime-local" name="p12">
+        {% endif %}
+        {{form.as_table}}
+        <div><input type="submit" class="button" value="{{buttonName}}"></div>
+    </form>
+</div>
+
+<h3>Лифты, эскалаторы:</h3>
+<!-- <i class="fi-like" style="font-size: 72px;"></i> -->
+{% if lifts|length %}
+    
+<table border="0" class="large-12">
+    <col width="130">
+    <col width="20">
+    <col width="20">
+    <col width="200">
+    <col width="250">
+    <th>Дата</th>
+    <th colspan="2">Время</th>
+    <th>Эскалатор</th>
+    <th>Происшествие</th>
+    <th colspan="2">Описание</th>
+    {% for lift in lifts %}
+    <tr>
+        <td>{{lift.stop_lift|date:'d E y г.'}}</td>
+        <td>{{lift.stop_lift|date:'H:i'}}</td>
+        <td>{{lift.start_lift|date:'H:i'}}</td>
+        <td>{{lift.lift_name}}</td>
+        <td>{{lift.fault}}</td>
+        <td>{{lift.discription}}</td>
+        <td>{% if lift.consequences %} &#10004; {% endif %}
+        </td>
+    </tr>
+    {% if forloop.last %}
+            <tr><td colspan="7">Всего: {{forloop.counter}}</td></tr>
+        {% endif %}
+    {% endfor %}
+</table>
+{% endif %}
+<div>
+    <form action="/addliftfault/" method="post">
+        {% csrf_token %}
+        {{lift_form}}
+        <div><input type="submit" class="button" value="Добавить"></div>
+    </form>
+</div>
+<div>
+    <form action="/newmail/" method="post">
+        {% csrf_token %}
+        {{commit_form}}
+        <div><input type="submit" class="button" value="Отправить отчет"></div>
+    </form>
+</div>
+
+{% endblock content %}

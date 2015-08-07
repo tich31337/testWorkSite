@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет за {{d_otch}}</title>
+    <style type="text/css">
+    .ispr {
+        background-color: #98FA85;
+    }
+    th {
+        text-align: left;
+    }
+    </style>
+</head>
+<body>
+    <p>Сменный инженер: {{username}}</p>
+    <p>Дата: {{d_otch|date:'d E y - H:i, l'}}</p>
+    {% if faults|length %}
+        <h3>Происшествия:</h3>
+        <table>
+           <!--  <col width="125">
+           <col width="20">
+           <col width="200">
+           <col width="150"> -->
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Система</th>
+            <th>Объект</th>
+            <th>Описание</th>
+            <th></th>
+            <!-- <th>Пользователь</th> -->
+            {% for fault in faults %}
+                {% if fault.correction %}
+                    <tr class="ispr">
+                {% else %}
+                    <tr>
+                {% endif %}
+                    <td>{{fault.fault_time|date:'d.m.y'}}-</td>
+                    <td>{{fault.fault_time|date:'H:i'}}</td>
+                    <td>{{fault.f_system}}</td>
+                    <td>{{fault.s_object}}</td>
+                    <td>{{fault.description}}</td>
+                    <td> {% if fault.correction %}
+                        &#10004;
+                    {% endif %}</td>
+                    <!-- <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td> -->
+                </tr>
+                {% if forloop.last %}
+                    <tr><td colspan="5">Происшествий: {{forloop.counter}}</td></tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if lifts|length %}
+        <h3>Лифты, эскалаторы:</h3>
+        <table>
+            <th>Дата</th>
+            <th colspan="2">Время</th>
+            <th>Эскалатор</th>
+            <th>Происшествие</th>
+            <th>Описание</th>
+            <th></th>
+            {% for lift in lifts %}
+            <tr>
+                <td>{{lift.stop_lift|date:'d E y г.'}}</td>
+                <td>{{lift.stop_lift|date:'H:i'}}</td>
+                <td>{{lift.start_lift|date:'H:i'}}</td>
+                <td>{{lift.lift_name}}</td>
+                <td>{{lift.fault}}</td>
+                <td>{{lift.discription}}</td>
+                <td>{% if lift.consequences %} 
+                    &#10004; 
+                {% endif %}</td>
+            </tr>
+            {% if forloop.last %}
+                    <tr><td colspan="2">Всего: {{forloop.counter}}</td></tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if lifts|length == 0 and faults|length == 0 %}
+        <p>Происшествий нет</p>
+    {% endif %}
+    <div>
+        <p>{{prim}}</p>
+    </div>
+</body>
+</html>

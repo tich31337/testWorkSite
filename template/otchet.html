@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}
+    Отчет
+{% endblock title %}
+{% block content %}
+
+<!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
+<!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
+{% if faults|length %}
+
+    <h3>Происшествия:</h3>
+    <table border="0">
+        <col width="125">
+        <col width="20">
+        <col width="400">
+        <col width="150">
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Система</th>
+        <th>Объект</th>
+        <th>Описание</th>
+        <th>Пользователь</th>
+        {% for fault in faults %}
+            <tr>
+                <td>{{fault.fault_time|date:'d E y г.'}}</td>
+                <td>{{fault.fault_time|date:'H:i'}}</td>
+                <td>{{fault.f_system}}</td>
+                <td>{{fault.s_object}}</td>
+                <td>{{fault.description}}</td> 
+                <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td>
+            </tr>
+            {% if forloop.last %}
+                <tr><td colspan="2">Происшествий: {{forloop.counter}}</td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Происшествий нет</p>
+{% endif %}
+
+<!-- <h2>Лифты, эскалаторы:</h2>
+<table border="0">
+    <col width="125">
+    <col width="20">
+    <col width="400">
+    <col width="150">
+    <th>Дата</th>
+    <th>Время</th>
+    <th>Эскалатор</th>
+    <th>Происшествие</th>
+    <th>Описание</th>
+    <th></th>
+    {% for lift in lifts %}
+    <tr>
+        <td>{{lift.stop_lift|date:'d E y г.'}}</td>
+        <td>{{lift.stop_lift|date:'H:i'}}</td>
+        <td>{{lift.lift_name}}</td>
+        <td>{{lift.fault}}</td>
+        <td>{{lift.discription}}</td>
+        <td>{% if lift.consequences %} Без последствий {% endif %}</td>
+    </tr>
+    {% if forloop.last %}
+            <tr><td colspan="2">Всего: {{forloop.counter}}</td></tr>
+        {% endif %}
+    {% endfor %}
+</table>
+
+ -->
+<div>
+    <p> {% if auth %}
+        Пользователь авторизован {{username}}
+    {% endif %}</p>
+</div>
+{% endblock content %}
