@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^index/$', index),
     url(r'^otchet/$', list_otchet),
     url(r'^newpost/(\d{1,6})/$', newpost),
+    url(r'^delpost/(\d{1,6})/$', delpost),
     url(r'^addpost/$', addpost),
     url(r'^addliftfault/$', addliftfault),
     url(r'^newmail/$', newmail),

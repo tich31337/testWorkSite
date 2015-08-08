@@ -44,7 +44,7 @@ def newpost(request, postid):
         # for a in b:
             # args['form'] = s_faultForm(initial=a)
         args['form'] = s_faultForm(initial={
-            'fault_time': relative.fault_time.strftime('%d.%m.%Y %H:%M'),
+            'fault_time': relative.fault_time,
             'f_system': relative.f_system,
             's_object': relative.s_object,
             'description': relative.description,
@@ -74,6 +74,18 @@ def addpost(request):
             if postid:
                 npost.pk=postid
             form.save()
+    return redirect('/newpost/0/')
+
+@login_required
+def delpost(request, postid):
+    com = s_commit.objects.order_by('-id')[0] # получаем последний закоммиченный объект
+    postid = int(postid)
+    if postid > com.s_fault_commit_id:
+        try:
+            s_fault.objects.get(pk=postid).delete()
+        except:
+            pass
+
     return redirect('/newpost/0/')
 
 @login_required
