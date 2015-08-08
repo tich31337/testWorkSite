@@ -7,6 +7,7 @@
 
 <!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
 <!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
+
 <h3>Происшествия:</h3>
 {% if faults|length %}
     <table border="0" class="large-12">
@@ -21,12 +22,17 @@
         <th>Описание</th>
         <!-- <th>Пользователь</th> -->
         {% for fault in faults %}
-            <tr>
+            <tr class="main">
                 <td>{{fault.fault_time|date:'d E y г.'}}</td>
                 <td>{{fault.fault_time|date:'H:i'}}</td>
                 <td>{{fault.f_system}}</td>
                 <td>{{fault.s_object}}</td>
-                <td>{{fault.description}}</td> 
+                <td>{{fault.description}}
+                    <div class="descr size-20">
+                    <a href="/newpost/{{fault.id}}/" class="fi-pencil redact"></a>
+                    &nbsp;&nbsp;
+                    <a href="/delpost/{{fault.id}}/" class="fi-x del"></a></div>
+                </td>
                 <!-- <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td> -->
             </tr>
             {% if forloop.last %}
@@ -39,11 +45,14 @@
 <div>
     <form action="/addpost/" method="post">
         {% csrf_token %}
-        {% if postid %}
-            <input type="text" name="postid" value="{{postid}}">
-            <input type="datetime-local" name="p12">
-        {% endif %}
-        {{form.as_table}}
+        <div class="large-4 medium-4">
+            <input type="hidden" name="postid" value="{{postid}}">
+        </div>
+            <!-- <input type="datetime-local" name="p12"> -->
+        <div>
+            {{form}}
+        
+        </div>
         <div><input type="submit" class="button" value="{{buttonName}}"></div>
     </form>
 </div>

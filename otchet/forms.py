@@ -28,10 +28,8 @@ class AdminUserChangeForm(UserChangeForm):
 
 class s_faultForm(forms.ModelForm):
     fault_time = forms.DateTimeField(initial=datetime.now().strftime('%d.%m.%Y %H:%M'), label='Время')
-    # pk = forms.IntegerField()
     class Meta:
         model = s_fault
-        # fields = '__all__'
         exclude = ('f_staff',)
 
 class s_drop_liftForm(forms.ModelForm):

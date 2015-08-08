@@ -33,31 +33,34 @@ def logout(request):
 
 @login_required
 def newpost(request, postid):
-    com = s_commit.objects.order_by('-id')[0]
+    com = s_commit.objects.order_by('-id')[0] # получаем последний закоммиченный объект
     args = {}
     args.update(csrf(request))
     postid = int(postid)
     if postid:
         relative = get_object_or_404(s_fault, pk=postid)
-        b = s_fault.objects.values().get(pk=postid)
-        args['form'] = s_faultForm(b)
-        # internation = s_fault.objects.select_related().get(pk=postid)
-        # args['form'] = s_faultForm(initial={
-            # 'fault_time': relative.fault_time,
-            # 'f_system': relative.f_system,
-            # 's_object': relative.s_object,
-            # 'description': relative.description,
-            # 'correction': relative.correction,})
+    if postid > com.s_fault_commit_id:
+        # b = s_fault.objects.filter(pk=postid).select_related()
+        # for a in b:
+            # args['form'] = s_faultForm(initial=a)
+        args['form'] = s_faultForm(initial={
+            'fault_time': relative.fault_time.strftime('%d.%m.%Y %H:%M'),
+            'f_system': relative.f_system,
+            's_object': relative.s_object,
+            'description': relative.description,
+            'correction': relative.correction,
+            })
         args['buttonName'] = 'Записать'
+        args['postid'] = postid
     else:
         args['form'] = s_faultForm
         args['buttonName'] = 'Добавить'
+        args['postid'] = 0
     args['faults'] = s_fault.objects.select_related().filter(pk__gt=com.s_fault_commit_id)
     args['lift_form'] = s_drop_liftForm
     args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt=com.s_lift_commit_id)
     args['commit_form'] = s_commitForm
     args['username'] = request.user.last_name+' '+request.user.first_name
-    args['postid'] = postid
     return render_to_response('newpost.html', args)
 
 @login_required
@@ -67,9 +70,9 @@ def addpost(request):
         if form.is_valid:
             npost = form.save(commit=False)
             npost.f_staff = CustomUser.objects.get(username=request.user.username)
-            # postid = int(request.POST.postid)
-            # if postid:
-            #     npost.pk=postid
+            postid = int(request.POST.get('postid'))
+            if postid:
+                npost.pk=postid
             form.save()
     return redirect('/newpost/0/')
 
