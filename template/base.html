@@ -5,31 +5,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/foundation.css' %}">
     <link rel="stylesheet" href="{% static 'img/foundation-icons.css' %}">
-    <script type="text/javascript" src="{% static 'js/vendor/jquery.js' %}"></script>
-    <style type="text/css">
-        .size-20{ 
-            font-size: 16px; 
-            color: #000000;
-        }
-        .size-20 a{color: #000000;}
-        .size-20 a.del:hover{color: red;}
-        .size-20 a.redact:hover{color: blue;}
-        .main .descr{
-            display: none;
-        }
-        .main:hover .descr{
-            position: relative;
-            /*left: 20px;*/
-            display: inline;
-
-            /*text-align: right;*/
-            /*margin: 50px 10px;*/
-        }
-
-    </style>
-    {% block java %}
-        
-    {% endblock java %}
+    <link rel="stylesheet" href="{% static 'css/myStyle.css' %}">
+    <script type="text/javascript" src="{% static 'js/vendor/jquery-2.1.4.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/myScript.js' %}"></script>
     <title>{% block title %}
         Заглавная страница
     {% endblock title %}</title>

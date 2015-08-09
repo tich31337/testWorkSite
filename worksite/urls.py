@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^addliftfault/$', addliftfault),
     url(r'^newmail/$', newmail),
     url(r'^$', list_otchet),
+    url(r'^faultcorrect/$', fault_correct),
 ]

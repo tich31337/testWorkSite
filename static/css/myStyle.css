@@ -1,0 +1,41 @@
+ .size-20{ 
+    font-size: 16px; 
+    color: #000000;
+}
+.size-20 a{color: #000000;}
+.size-20 a.del:hover{color: red;}
+.size-20 a.redact:hover{color: blue;}
+.main .descr{
+    display: none;
+}
+.main:hover .descr{
+    position: relative;
+    /*left: 20px;*/
+    display: inline;
+
+    /*text-align: right;*/
+    /*margin: 50px 10px;*/
+}
+
+.main .check{
+    position: relative;
+    display: inline;
+}
+.main .check .chk{
+    color: #C2FCA1;
+}
+.main:hover .check .chk{
+    color: #22B116;
+}
+.main .check .nochk{
+    color: #E2E3DE;
+}
+.main:hover .check .nochk{
+    color: #000000;
+}
+.testjsdiv{
+    position: relative;
+    /*top: 400px;*/
+    /*left: 400px;*/
+    /*font: 20px;*/
+}

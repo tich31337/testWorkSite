@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 # from django.contrib.flatpages.models import FlatPage
 from django.template import Context, loader 
 from datetime import datetime
+# from django.utils import json
 
 @login_required
 def list_otchet(request):
@@ -125,4 +126,21 @@ def newmail(request):
         s_prim = args['prim'],
         s_staff_commit = CustomUser.objects.get(username=request.user.username),)
     commit.save()
-    return redirect('/newpost/')
+    return redirect('/newpost/0/')
+
+@login_required
+def fault_correct(request):
+    # context = {}
+    try:
+        com = s_commit.objects.order_by('-id')[0]
+        postid = int(request.GET['data'])
+        if postid > com.s_fault_commit_id:
+            postdb = s_fault.objects.get(pk=postid)
+            postdb.correction = not postdb.correction
+            postdb.save()
+    except:
+        pass
+        # context['text'] = 'error'
+    # else:
+        # context['text'] = data[::-1]
+    return redirect('/newpost/0/')

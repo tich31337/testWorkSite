@@ -28,11 +28,19 @@
                 <td>{{fault.f_system}}</td>
                 <td>{{fault.s_object}}</td>
                 <td>{{fault.description}}</td>
-                <td width="64">
+                <td width="85">
+                    <div class="size-20 check">
+                    {% if fault.correction %}
+                        <a href="" dt="{{fault.id}}" class="ch fi-check chk"></a>
+                    {% else %}
+                        <a href="" dt="{{fault.id}}" class="ch fi-check nochk"></a>
+                    {% endif %}&nbsp;
+                    </div>
                     <div class="descr size-20">
-                    <a href="/newpost/{{fault.id}}/" class="fi-pencil redact"></a>
-                    &nbsp;&nbsp;
-                    <a href="/delpost/{{fault.id}}/" class="fi-x del"></a></div>
+                        <a href="/newpost/{{fault.id}}/" class="fi-pencil redact"></a>
+                        &nbsp;
+                        <a href="/delpost/{{fault.id}}/" class="fi-x del"></a>
+                    </div>
                 </td>
                 <!-- <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td> -->
             </tr>
@@ -57,7 +65,33 @@
         <div><input type="submit" class="button" value="{{buttonName}}"></div>
     </form>
 </div>
-
+<!-- Эксперемент с AJAX -->
+<div>
+    <!-- <form action="" method="get">-->
+        <div class="testjsdiv"><a href="/checkpost/" id="testjs" class="fi-check"></a></div>
+        <input id="text-ajax" type="text" value="" />
+        <div>
+            <input id="clickme" class="button" type="submit" value="Кликни меня" />
+        </div>
+    <!--</form> -->
+</div>
+<!--<script>
+    $(document).ready(function(){
+        $('#clickme').click(function(){
+            $.ajaxSetup({
+                success: function(data){
+                    data = $.parseJSON(data);
+                    alert(data['new-text']);
+                }
+            });
+        $.post('/ajax/test/', {'text': $('#test-ajax').val()});
+    });
+        function(data){
+               $('#like_count').html(data);
+               $('#likes').hide();
+           }
+</script>-->
+<!-- Конец эксперемента с ajax -->
 <h3>Лифты, эскалаторы:</h3>
 <!-- <i class="fi-like" style="font-size: 72px;"></i> -->
 {% if lifts|length %}
