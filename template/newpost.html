@@ -5,9 +5,6 @@
 {% endblock title %}
 {% block content %}
 
-<!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
-<!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
-
 <h3>Происшествия:</h3>
 {% if faults|length %}
     <table border="0" class="large-12">
@@ -20,7 +17,6 @@
         <th>Система</th>
         <th>Объект</th>
         <th>Описание</th>
-        <!-- <th>Пользователь</th> -->
         {% for fault in faults %}
             <tr class="main">
                 <td>{{fault.fault_time|date:'d E y г.'}}</td>
@@ -42,10 +38,9 @@
                         <a href="/delpost/{{fault.id}}/" class="fi-x del"></a>
                     </div>
                 </td>
-                <!-- <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td> -->
             </tr>
             {% if forloop.last %}
-                <tr><td colspan="5">Происшествий: {{forloop.counter}}</td></tr>
+                <tr><td colspan="6">Происшествий: {{forloop.counter}}</td></tr>
             {% endif %}
         {% endfor %}
     </table>
@@ -60,40 +55,12 @@
             <!-- <input type="datetime-local" name="p12"> -->
         <div>
             {{form}}
-        
         </div>
         <div><input type="submit" class="button" value="{{buttonName}}"></div>
     </form>
 </div>
-<!-- Эксперемент с AJAX -->
-<div>
-    <!-- <form action="" method="get">-->
-        <div class="testjsdiv"><a href="/checkpost/" id="testjs" class="fi-check"></a></div>
-        <input id="text-ajax" type="text" value="" />
-        <div>
-            <input id="clickme" class="button" type="submit" value="Кликни меня" />
-        </div>
-    <!--</form> -->
-</div>
-<!--<script>
-    $(document).ready(function(){
-        $('#clickme').click(function(){
-            $.ajaxSetup({
-                success: function(data){
-                    data = $.parseJSON(data);
-                    alert(data['new-text']);
-                }
-            });
-        $.post('/ajax/test/', {'text': $('#test-ajax').val()});
-    });
-        function(data){
-               $('#like_count').html(data);
-               $('#likes').hide();
-           }
-</script>-->
-<!-- Конец эксперемента с ajax -->
+
 <h3>Лифты, эскалаторы:</h3>
-<!-- <i class="fi-like" style="font-size: 72px;"></i> -->
 {% if lifts|length %}
     
 <table border="0" class="large-12">
