@@ -98,7 +98,7 @@ class s_drop_lift(models.Model):
         return '%s - %s %s %s %s' % (self.stop_lift, self.start_lift, self.lift_name, self.fault, self.description)
     
     stop_lift   = models.DateTimeField  (verbose_name ='Время остановки'            )
-    start_lift  = models.DateTimeField  ('Время запуска', blank=True                )
+    start_lift  = models.DateTimeField  ('Время запуска', blank=True, null=True     )
     lift_name   = models.ForeignKey     ('s_lift'       , verbose_name='Название'   )
     fault       = models.ForeignKey     ('s_fault_lift' , verbose_name='Тип'        )
     description = models.CharField      ('Описание'     , max_length=50, blank=True )

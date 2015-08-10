@@ -1,1 +1,3 @@
 /worksite/settings.py
+otchet/migrations/*
+work_nginx.conf

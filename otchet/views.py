@@ -22,7 +22,7 @@ def list_otchet(request):
 # TODO: Сделать нормально, без редиректа.
 @login_required
 def profile(request):
-    return redirect('/newpost/')
+    return redirect('/newpost/0/')
 
 @login_required
 def index(request):
@@ -33,7 +33,7 @@ def logout(request):
     return redirect('/accounts/login/')
 
 @login_required
-def newpost(request, postid):
+def newpost(request, postid=0):
     com = s_commit.objects.order_by('-id')[0] # получаем последний закоммиченный объект
     args = {}
     args.update(csrf(request))
@@ -95,7 +95,7 @@ def addliftfault(request):
         form = s_drop_liftForm(request.POST)
         if form.is_valid:
             nlift = form.save()
-    return redirect('/newpost/')
+    return redirect('/newpost/0/')
 
 @login_required
 def newmail(request):
@@ -114,9 +114,9 @@ def newmail(request):
             args['prim'] = request.POST['s_prim']
     body_html = t.render(Context(args))
     send_mail(
-        'Django test mail',
-        '<p>This is an <strong>important</strong> message.</p>',
-        'tich31337@yandex.ru',
+        'Сдача смены',
+        'Сменный инженер',
+        '5704@koltsovo.ru',
         ['tich31337@gmail.com',],
         html_message=body_html,)
     commit = s_commit(
