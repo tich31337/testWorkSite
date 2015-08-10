@@ -1,3 +1,6 @@
 /worksite/settings.py
 otchet/migrations/*
 work_nginx.conf
+otchet/migrations/*
+work_nginx.conf
+db.sqlite3
