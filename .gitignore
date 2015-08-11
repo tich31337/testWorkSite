@@ -2,3 +2,5 @@
 /otchet/migrations/*
 /work_nginx.conf
 /db.sqlite3
+otchet/migrations/*
+otchet/migrations/

@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response, redirect, get_object_or
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import s_fault, CustomUser, s_commit, s_drop_lift
-from .forms import s_faultForm, s_drop_liftForm, s_commitForm
+from .forms import s_faultForm, s_drop_liftForm, s_commitForm, SMForm
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
@@ -45,7 +45,7 @@ def newpost(request, postid=0):
         # for a in b:
             # args['form'] = s_faultForm(initial=a)
         args['form'] = s_faultForm(initial={
-            'fault_time': relative.fault_time,
+            'fault_time': relative.fault_time.strftime('%d.%m.%Y %H:%M'),
             'f_system': relative.f_system,
             's_object': relative.s_object,
             'description': relative.description,

@@ -15,3 +15,11 @@ function show(){
         }
     });   
 }
+$(".datepickerTimeField").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd.mm.yyyy',
+        firstDay: 1, changeFirstDay: false,
+        navigationAsDateFormat: false,
+        duration: 0,// отключаем эффект появления
+});

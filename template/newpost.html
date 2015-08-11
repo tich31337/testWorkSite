@@ -53,8 +53,33 @@
             <input type="hidden" name="postid" value="{{postid}}">
         </div>
             <!-- <input type="datetime-local" name="p12"> -->
-        <div>
-            {{form}}
+        <div class="row">
+            {{form.non_field_errors}}
+            <div class="large-4 medium-4 columns">
+                {{form.fault_time.errors}}
+                {{form.fault_time.label_tag}}
+                {{form.fault_time}}
+            </div>
+            <div class="large-4 medium-4 columns">
+                {{form.f_system.errors}}
+                {{form.f_system.label_tag}}
+                {{form.f_system}}
+            </div>
+            <div class="large-4 medium-4 columns">
+                {{form.s_object.errors}}
+                {{form.s_object.label_tag}}
+                {{form.s_object}}
+            </div>
+            <div class="large-12 columns">
+                {{form.description.errors}}
+                {{form.description.label_tag}}
+                {{form.description}}
+            </div>
+            <div class="columns">
+                {{form.correction.errors}}
+                {{form.correction.label_tag}}
+                {{form.correction}}
+            </div>
         </div>
         <div><input type="submit" class="button" value="{{buttonName}}"></div>
     </form>
@@ -99,14 +124,51 @@
 <div>
     <form action="/addliftfault/" method="post">
         {% csrf_token %}
-        {{lift_form}}
+        <div class="row">
+            {{lift_form.non_field_errors}}
+            <div class="small-3 columns">
+                {{lift_form.stop_lift.errors}}
+                {{lift_form.stop_lift.label_tag}}
+                {{lift_form.stop_lift}}
+            </div>
+            <div class="small-3 columns">
+                {{lift_form.start_lift.errors}}
+                {{lift_form.start_lift.label_tag}}
+                {{lift_form.start_lift}}
+            </div>
+            <div class="small-3 columns">
+                {{lift_form.lift_name.errors}}
+                {{lift_form.lift_name.label_tag}}
+                {{lift_form.lift_name}}
+            </div>
+            <div class="small-3 columns">
+                {{lift_form.fault.errors}}
+                {{lift_form.fault.label_tag}}
+                {{lift_form.fault}}
+            </div>
+            <div class="large-12 columns">
+                {{lift_form.description.errors}}
+                {{lift_form.description.label_tag}}
+                {{lift_form.description}}
+            </div>
+            <div class="columns">
+                {{lift_form.consequences.errors}}
+                {{lift_form.consequences.label_tag}}
+                {{lift_form.consequences}}
+            </div>
+        <!--{{lift_form.as_div}}-->
+        </div>
         <div><input type="submit" class="button" value="Добавить"></div>
     </form>
 </div>
 <div>
     <form action="/newmail/" method="post">
         {% csrf_token %}
-        {{commit_form}}
+        <div class="row">
+            <div class="large-12 columns">
+                {{commit_form}}
+            </div>
+        </div>
         <div><input type="submit" class="button" value="Отправить отчет"></div>
     </form>
 </div>

@@ -28,21 +28,77 @@ class AdminUserChangeForm(UserChangeForm):
         fields  = '__all__'
 
 class s_faultForm(forms.ModelForm):
-    fault_time = forms.DateTimeField(label='Время', widget=forms.TextInput(attrs={'type': 'datetime-local', 'value': '10. 08. 2015 10:00'}))
+    # error_css_class = 'large-4 medium-4 columns'
+    # required_css_class = 'large-4 medium-4 columns'
+    # htmlClass = 'large-4 medium-4 columns'
+    fault_time = forms.DateTimeField(
+        label='Время', 
+        widget=forms.TextInput(attrs={      'type': 'datetime',
+                                            'value': datetime.now().strftime('%d.%m.%Y %H:%M'),
+                                            # 'class': 'large-4 medium-4 columns',
+                                            # 'data-date-time': ''
+                                            }))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': '2'}), label='Описание:', )
+
     class Meta:
         model = s_fault
         exclude = ('f_staff',)
 
+    # def __init__(self, *args, **kwargs):
+    #     super(ModelForm, self).__init__(*args, **kwargs)
+    #     # adding css classes to widgets without define the fields:
+    #     for field in self.fields:
+    #         self.fields[field].widget.attrs['class'] = 'test'
+    def as_div(self):
+        "Returns this form rendered as HTML <div>s."
+        return self._html_output(
+            normal_row = u'<div class ="large-4 medium-4 columns">%(label)s %(field)s %(help_text)s %(errors)s</div>',
+            error_row = u'<div class="error">%s</div>',
+            row_ender = '</div>',
+            help_text_html = u'<div class="hefp-text">%s</div>',
+            errors_on_separate_row = False)
+
+
+
 class s_drop_liftForm(forms.ModelForm):
-    stop_lift = forms.DateTimeField(label = 'Время остановки', widget=forms.TextInput(attrs={'type': 'datetime-local'}))
-    start_lift = forms.DateTimeField(label = 'Время запуска', widget=forms.TextInput(attrs={'type': 'datetime-local'}))
+    # error_css_class = 'large-4 medium-4 columns'
+    # required_css_class = 'large-4 medium-4 columns'
+    stop_lift = forms.DateTimeField(label = 'Время остановки', widget=forms.TextInput(attrs={'type': 'datetime', 'value': datetime.now().strftime('%d.%m.%Y %H:%M')}))
+    start_lift = forms.DateTimeField(label = 'Время запуска', widget=forms.TextInput(attrs={'type': 'datetime', 'value': datetime.now().strftime('%d.%m.%Y %H:%M')}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': '2'}), label='Описание:', )
     class Meta:
         model   = s_drop_lift
         fields  = '__all__'
 
+    def as_div(self):
+        "Returns this form rendered as HTML <div>s."
+        return self._html_output(
+            normal_row = u'<div class ="large-4 medium-4 columns">%(label)s %(field)s %(help_text)s %(errors)s</div>',
+            error_row = u'<div class="error">%s</div>',
+            row_ender = '</div>',
+            help_text_html = u'<div class="hefp-text">%s</div>',
+            errors_on_separate_row = False)
+
 
 class s_commitForm(forms.ModelForm):
+    s_prim = forms.CharField(widget=forms.Textarea(attrs={'rows': '2'}), label='Примечание:', )
     class Meta:
         model = s_commit
         fields = ('s_prim',)
 
+class SMForm(forms.ModelForm):
+    error_css_class = 'large-4 medium-4 columns'
+    required_css_class = 'large-4 medium-4 columns'
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        # adding css classes to widgets without define the fields:
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'test'
+    def as_div(self):
+        "Returns this form rendered as HTML <div>s."
+        return self._html_output(
+            normal_row = u'<div%(html_class_attr)s>%(label)s %(field)s %(help_text)s %(errors)s</div>',
+            error_row = u'<div class="error">%s</div>',
+            row_ender = '</div>',
+            help_text_html = u'<div class="hefp-text">%s</div>',
+            errors_on_separate_row = False)
