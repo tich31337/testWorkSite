@@ -145,7 +145,7 @@ class s_objects(models.Model):
     class Meta:
         verbose_name = "Объект"
         verbose_name_plural = "Объекты"
-        ordering = ['name']
+        # ordering = ['name']
 
     def __str__(self):
         return self.name
