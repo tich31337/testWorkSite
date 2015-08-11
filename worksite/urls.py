@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^newmail/$', newmail),
     url(r'^$', newpost),
     url(r'^faultcorrect/$', fault_correct),
+    url(r'^liftdel/$', lift_del),
 ]

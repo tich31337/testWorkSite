@@ -97,21 +97,29 @@ class s_drop_lift(models.Model):
     def __str__(self):
         return '%s - %s %s %s %s' % (self.stop_lift, self.start_lift, self.lift_name, self.fault, self.description)
     
-    stop_lift   = models.DateTimeField  (verbose_name ='Время остановки'            )
-    start_lift  = models.DateTimeField  ('Время запуска', blank=True, null=True     )
-    lift_name   = models.ForeignKey     ('s_lift'       , verbose_name='Название'   )
-    fault       = models.ForeignKey     ('s_fault_lift' , verbose_name='Происшествие'        )
-    description = models.CharField      ('Описание'     , max_length=50, blank=True )
-    consequences= models.BooleanField   ('Без последствий'                          )
+    stop_lift   = models.DateTimeField  (verbose_name ='Время остановки'                        )
+    start_lift  = models.DateTimeField  ('Время запуска', blank=True, null=True                 )
+    lift_name   = models.ForeignKey     ('s_lift'       , verbose_name='Название'               )
+    fault       = models.ForeignKey     ('s_fault_lift' , verbose_name='Происшествие'           )
+    description = models.CharField      ('Описание'     , max_length=50, blank=True, null=True  )
+    consequences= models.BooleanField   ('Без последствий'                                      )
 
 class s_lift(models.Model):
 
     class Meta:
         verbose_name        = "Лифт/Эскалатор"
         verbose_name_plural = "Лифты/Эскалаторы"
-        ordering            = ['ser_num']
+        ordering            = ['-l_type','ser_num']
 
     def __str__(self):
+        ter = 'Тер.' + self.terminal
+        if self.l_type == 'Л':
+            esk = self.get_l_type_display()
+        else:
+            esk = 'Эск.' 
+        return '%s %s %s - %s' % (ter, esk, self.ser_num, self.location)
+
+    def lift_full_name(self):
         return '%s %s %s %s' % (self.get_terminal_display(), self.get_l_type_display(), self.ser_num, self.location)
 
     LIFT_CHOICES = (
@@ -123,17 +131,24 @@ class s_lift(models.Model):
         ('A', 'Терминал A'),
         ('B', 'Терминал B'),
         )
+    DIRECTION_CHOICES = (
+        ('u', 'Вверх'),
+        ('d', 'Вниз'),
+        )
 
-    ser_num     = models.SmallIntegerField  ('Номер'                                                                            )
-    l_type      = models.CharField          ('Тип'                                    , max_length=1, choices = LIFT_CHOICES    )
-    terminal    = models.CharField          ('Терминал'                               , max_length=1, choices = TERMINAL_CHOICES)
-    location    = models.CharField          ('Месторасположение, направление, этаж'   , max_length=50                           )
+    ser_num     = models.SmallIntegerField  ('Номер'                                                                        )
+    l_type      = models.CharField          ('Тип'              , max_length = 1, choices = LIFT_CHOICES                    )
+    terminal    = models.CharField          ('Терминал'         , max_length = 1, choices = TERMINAL_CHOICES                )
+    location    = models.CharField          ('Месторасположение', max_length = 50                                           )
+    direction   = models.CharField          ('Направление'      , default = 'd', max_length = 1, choices = DIRECTION_CHOICES)
+    floor       = models.SmallIntegerField  ('Этаж'             , default = 1                                               )
 
 class s_fault_lift(models.Model):
 
     class Meta:
         verbose_name        = "Причина остановки"
         verbose_name_plural = "Причины остановки"
+        ordering            = ['type_fault']
 
     def __str__(self):
         return self.type_fault
@@ -145,7 +160,7 @@ class s_objects(models.Model):
     class Meta:
         verbose_name = "Объект"
         verbose_name_plural = "Объекты"
-        # ordering = ['name']
+        ordering = ['name']
 
     def __str__(self):
         return self.name

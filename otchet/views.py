@@ -144,3 +144,14 @@ def fault_correct(request):
     # else:
         # context['text'] = data[::-1]
     return redirect('/newpost/0/')
+
+@login_required
+def lift_del(request):
+    # try:
+    com = s_commit.objects.order_by('-id')[0]
+    postid = int(request.GET['data'])
+    if postid > com.s_lift_commit_id:
+        s_drop_lift.objects.get(pk=postid).delete()
+    # except:
+        # pass
+    return redirect('/newpost/0/')    

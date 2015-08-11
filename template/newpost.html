@@ -7,7 +7,8 @@
 
 <h3>Происшествия:</h3>
 {% if faults|length %}
-    <table border="0" class="large-12">
+<div>
+    <table class="large-12">
         <col width="125">
         <col width="20">
         <col width="200">
@@ -27,15 +28,15 @@
                 <td width="85">
                     <div class="size-20 check">
                     {% if fault.correction %}
-                        <a href="" dt="{{fault.id}}" class="ch fi-check chk"></a>
+                        <a href="" dt="{{fault.id}}" class="ch fi-check chk" title="Устранено"></a>
                     {% else %}
-                        <a href="" dt="{{fault.id}}" class="ch fi-check nochk"></a>
+                        <a href="" dt="{{fault.id}}" class="ch fi-check nochk" title="Устранено"></a>
                     {% endif %}&nbsp;
                     </div>
                     <div class="descr size-20">
-                        <a href="/newpost/{{fault.id}}/" class="fi-pencil redact"></a>
+                        <a href="/newpost/{{fault.id}}/" class="fi-pencil redact" title="Редактировать"></a>
                         &nbsp;
-                        <a href="/delpost/{{fault.id}}/" class="fi-x del"></a>
+                        <a href="/delpost/{{fault.id}}/" class="fi-x del" title="Удалить"></a>
                     </div>
                 </td>
             </tr>
@@ -44,6 +45,7 @@
             {% endif %}
         {% endfor %}
     </table>
+    </div>
 {% endif %}
 
 <div>
@@ -87,39 +89,41 @@
 
 <h3>Лифты, эскалаторы:</h3>
 {% if lifts|length %}
-    
-<table border="0" class="large-12">
-    <col width="130">
-    <col width="20">
-    <col width="20">
-    <col width="200">
-    <col width="250">
-    <th>Дата</th>
-    <th colspan="2">Время</th>
-    <th>Эскалатор</th>
-    <th>Происшествие</th>
-    <th colspan="2">Описание</th>
-    {% for lift in lifts %}
-    <tr>
-        <td>{{lift.stop_lift|date:'d E y г.'}}</td>
-        <td>{{lift.stop_lift|date:'H:i'}}</td>
-        <td>{{lift.start_lift|date:'H:i'}}</td>
-        <td>{{lift.lift_name}}</td>
-        <td>{{lift.fault}}</td>
-        <td>{{lift.discription}}</td>
-        <td>{% if lift.consequences %} Без посл. {% endif %}
-            <div class="descr size-20">
-                <a href="/newpost/l/{{lift.id}}/" class="fi-pencil redact"></a>
-                &nbsp;
-                <a href="/delpost/l/{{lift.id}}/" class="fi-x del"></a>
-            </div>
-        </td>
-    </tr>
-    {% if forloop.last %}
-            <tr><td colspan="7">Всего: {{forloop.counter}}</td></tr>
-        {% endif %}
-    {% endfor %}
-</table>
+<div>
+    <table class="large-12">
+        <col width="130">
+        <col width="20">
+        <col width="20">
+        <col width="200">
+        <col width="150">
+        <th>Дата</th>
+        <th colspan="2">Время</th>
+        <th>Эскалатор</th>
+        <th>Происшествие</th>
+        <th colspan="2">Описание</th>
+        {% for lift in lifts %}
+            <tr class="main">
+                <td>{{lift.stop_lift|date:'d E y г.'}}</td>
+                <td>{{lift.stop_lift|date:'H:i'}}</td>
+                <td>{{lift.start_lift|date:'H:i'}}</td>
+                <td>{{lift.lift_name}}</td>
+                <td>{{lift.fault}}</td>
+                <td>{{lift.discription}}{% if lift.consequences %} &nbsp;Без посл. {% endif %}</td>
+                <td width="60">
+                    <div class="descr size-20">
+                        <a href="/newpost/l/{{lift.id}}/" class="fi-pencil redact" title="Редактировать"></a>
+                        &nbsp;
+                        <!-- <a href="" dl="{{lift.id}}" class="fi-x del del_lift" title="Удалить"></a> -->
+                        <a dl="{{lift.id}}" class="fi-x del del_lift" title="Удалить"></a>
+                    </div>
+                </td>
+            </tr>
+            {% if forloop.last %}
+                <tr><td colspan="7">Всего: {{forloop.counter}}</td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</div>
 {% endif %}
 <div>
     <form action="/addliftfault/" method="post">
