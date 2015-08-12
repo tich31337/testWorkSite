@@ -108,12 +108,11 @@
                 <td>{{lift.start_lift|date:'H:i'}}</td>
                 <td>{{lift.lift_name}}</td>
                 <td>{{lift.fault}}</td>
-                <td>{{lift.discription}}{% if lift.consequences %} &nbsp;Без посл. {% endif %}</td>
+                <td>{{lift.description}}{% if lift.consequences %} &nbsp;Без посл. {% endif %}</td>
                 <td width="60">
                     <div class="descr size-20">
                         <a href="/newpost/l/{{lift.id}}/" class="fi-pencil redact" title="Редактировать"></a>
                         &nbsp;
-                        <!-- <a href="" dl="{{lift.id}}" class="fi-x del del_lift" title="Удалить"></a> -->
                         <a dl="{{lift.id}}" class="fi-x del del_lift" title="Удалить"></a>
                     </div>
                 </td>

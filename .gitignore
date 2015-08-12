@@ -4,3 +4,5 @@
 /db.sqlite3
 otchet/migrations/*
 otchet/migrations/
+*/__pycashe__/
+*/__pycashe__

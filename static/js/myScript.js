@@ -9,14 +9,16 @@ $(document).ready(function(){
         var data;
         data = $(this).attr('dl');
         $.get('/liftdel/', {data: data});//сделать передачу через post
-        show1();
+        location.reload();
+        // $('.main').load(location.href+" .main>*","");
+        // show1();
 
     });
 });
 function show1(){
     $.ajax({
         url: '/newpost/0/',
-        cache: false,
+        cache: true,
         success: function(html){
             $(".fi-check").html(html);
         }

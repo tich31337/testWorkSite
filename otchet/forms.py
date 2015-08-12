@@ -65,7 +65,7 @@ class s_drop_liftForm(forms.ModelForm):
     # required_css_class = 'large-4 medium-4 columns'
     stop_lift = forms.DateTimeField(label = 'Время остановки', widget=forms.TextInput(attrs={'type': 'datetime', 'value': datetime.now().strftime('%d.%m.%Y %H:%M')}))
     start_lift = forms.DateTimeField(label = 'Время запуска', widget=forms.TextInput(attrs={'type': 'datetime', 'value': datetime.now().strftime('%d.%m.%Y %H:%M')}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': '2'}), label='Описание:', )
+    description = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': '2'}), label='Описание:', )
     class Meta:
         model   = s_drop_lift
         fields  = '__all__'
