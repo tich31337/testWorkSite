@@ -16,6 +16,7 @@ def list_otchet(request):
     args = {}
     # args.update(csrf(request))
     args['faults'] = s_fault.objects.select_related()
+    args['lifts'] = s_drop_lift.objects.select_related()
     args['username'] = request.user.last_name+' '+request.user.first_name
     return render_to_response('otchet.html', args)
 

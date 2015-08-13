@@ -79,8 +79,8 @@
             </div>
             <div class="columns">
                 {{form.correction.errors}}
-                {{form.correction.label_tag}}
-                {{form.correction}}
+                {{form.correction}}<label for="{{form.correction.id_for_label}}">устранено</label>
+                <!-- {{form.correction.label_tag}} -->
             </div>
         </div>
         <div><input type="submit" class="button" value="{{buttonName}}"></div>
@@ -156,8 +156,9 @@
             </div>
             <div class="columns">
                 {{lift_form.consequences.errors}}
-                {{lift_form.consequences.label_tag}}
-                {{lift_form.consequences}}
+                {{lift_form.consequences}}<label for="{{lift_form.consequences.id_for_label}}">без послесдствий {{lift_form.consequences.choice_label}}</label>
+                <!-- {{lift_form.consequences.label_tag}} -->
+                
             </div>
         <!--{{lift_form.as_div}}-->
         </div>

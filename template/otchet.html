@@ -10,9 +10,9 @@
 
     <h3>Происшествия:</h3>
     <table border="0">
-        <col width="125">
+        <col width="100">
         <col width="20">
-        <col width="400">
+        <col width="220">
         <col width="150">
         <th>Дата</th>
         <th>Время</th>
@@ -22,7 +22,7 @@
         <th>Пользователь</th>
         {% for fault in faults %}
             <tr>
-                <td>{{fault.fault_time|date:'d E y г.'}}</td>
+                <td>{{fault.fault_time|date:'d.m.y'}}</td>
                 <td>{{fault.fault_time|date:'H:i'}}</td>
                 <td>{{fault.f_system}}</td>
                 <td>{{fault.s_object}}</td>
@@ -30,7 +30,7 @@
                 <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td>
             </tr>
             {% if forloop.last %}
-                <tr><td colspan="2">Происшествий: {{forloop.counter}}</td></tr>
+                <tr><td colspan="6">Происшествий: {{forloop.counter}}</td></tr>
             {% endif %}
         {% endfor %}
     </table>
@@ -38,37 +38,32 @@
     <p>Происшествий нет</p>
 {% endif %}
 
-<!-- <h2>Лифты, эскалаторы:</h2>
-<table border="0">
-    <col width="125">
-    <col width="20">
-    <col width="400">
-    <col width="150">
-    <th>Дата</th>
-    <th>Время</th>
-    <th>Эскалатор</th>
-    <th>Происшествие</th>
-    <th>Описание</th>
-    <th></th>
-    {% for lift in lifts %}
-    <tr>
-        <td>{{lift.stop_lift|date:'d E y г.'}}</td>
-        <td>{{lift.stop_lift|date:'H:i'}}</td>
-        <td>{{lift.lift_name}}</td>
-        <td>{{lift.fault}}</td>
-        <td>{{lift.discription}}</td>
-        <td>{% if lift.consequences %} Без последствий {% endif %}</td>
-    </tr>
-    {% if forloop.last %}
-            <tr><td colspan="2">Всего: {{forloop.counter}}</td></tr>
-        {% endif %}
-    {% endfor %}
-</table>
-
- -->
+<h3>Лифты, эскалаторы:</h3>
 <div>
-    <p> {% if auth %}
-        Пользователь авторизован {{username}}
-    {% endif %}</p>
+    <table class="large-12">
+        <col width="100">
+        <col width="20">
+        <col width="20">
+        <col width="200">
+        <col width="230">
+        <th>Дата</th>
+        <th colspan="2">Время</th>
+        <th>Эскалатор</th>
+        <th>Происшествие</th>
+        <th colspan="2">Описание</th>
+        {% for lift in lifts %}
+            <tr class="main">
+                <td>{{lift.stop_lift|date:'d.m.y'}}</td>
+                <td>{{lift.stop_lift|date:'H:i'}}</td>
+                <td>{{lift.start_lift|date:'H:i'}}</td>
+                <td>{{lift.lift_name}}</td>
+                <td>{{lift.fault}}</td>
+                <td>{{lift.description}} {% if lift.consequences %}Без посл. {% endif %}</td>
+            </tr>
+            {% if forloop.last %}
+                <tr><td colspan="7">Всего: {{forloop.counter}}</td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
 </div>
 {% endblock content %}
