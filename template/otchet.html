@@ -6,6 +6,18 @@
 
 <!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
 <!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
+<form action="/otchet/" method="get">
+    <div class="large-4 medium-4 columns">
+        <label for="id_start_time">Время начала:</label> 
+        <input id="id_start_time" type="datetime">
+    </div>
+    <div class="large-4 medium-4 columns">
+        <label for="id_stop_time">Время окончания:</label>
+        <input id="id_stop_time" type="datetime">
+    </div>
+        <input type="submit" class="button" value="Применить">
+</form>
+
 {% if faults|length %}
 
     <h3>Происшествия:</h3>

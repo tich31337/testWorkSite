@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load tz %}
 {% block title %}
     Отчет
 {% endblock title %}
@@ -34,9 +34,9 @@
                     {% endif %}&nbsp;
                     </div>
                     <div class="descr size-20">
-                        <a href="/newpost/{{fault.id}}/" class="fi-pencil redact" title="Редактировать"></a>
+                        <a href="/newpost/{{fault.id}}/0/" dt="{{fault.id}}" class="fi-pencil redact" title="Редактировать"></a>
                         &nbsp;
-                        <a href="/delpost/{{fault.id}}/" class="fi-x del" title="Удалить"></a>
+                        <a href="" class="fi-x del" title="Удалить"></a>
                     </div>
                 </td>
             </tr>
@@ -48,7 +48,7 @@
     </div>
 {% endif %}
 
-<div>
+<div id="forminputfault">
     <form action="/addpost/" method="post">
         {% csrf_token %}
         <div class="large-4 medium-4">
@@ -111,7 +111,7 @@
                 <td>{{lift.description}}{% if lift.consequences %} &nbsp;Без посл. {% endif %}</td>
                 <td width="60">
                     <div class="descr size-20">
-                        <a href="/newpost/l/{{lift.id}}/" class="fi-pencil redact" title="Редактировать"></a>
+                        <a href="/newpost/0/{{lift.id}}/" class="fi-pencil redact lredact" title="Редактировать"></a>
                         &nbsp;
                         <a dl="{{lift.id}}" class="fi-x del del_lift" title="Удалить"></a>
                     </div>
@@ -127,6 +127,7 @@
 <div>
     <form action="/addliftfault/" method="post">
         {% csrf_token %}
+        <input type="hidden" name="liftid" value="{{liftid}}">
         <div class="row">
             {{lift_form.non_field_errors}}
             <div class="small-3 columns">
@@ -162,7 +163,7 @@
             </div>
         <!--{{lift_form.as_div}}-->
         </div>
-        <div><input type="submit" class="button" value="Добавить"></div>
+        <div><input type="submit" class="button" value="{{button_lift_name}}"></div>
     </form>
 </div>
 <div>

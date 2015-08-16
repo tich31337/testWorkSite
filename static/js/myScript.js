@@ -3,7 +3,35 @@ $(document).ready(function(){
         var data;
         data = $(this).attr('dt');
         $.get('/faultcorrect/', {data: data});//сделать передачу через post
-        show1();
+        location.reload();
+        // show1();
+    });
+    // $('.fredact')click(function() {
+    //     var fdata;
+    //     fdata = $(this).attr('dt');
+    //     $.get('/newpost/', {data: data});
+    //     location.reload();
+    // });
+    $('.fredact').click(function(){
+        var fdata;
+        fdata = $(this).attr('dt');
+        $.ajax({
+        url: '/newpost/',
+        data: {data: fdata},
+        success: function(){
+            $(html).load('/newpost/',{
+            data: fdata});
+            }
+    })
+    .done(function() {
+        console.log("success");
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
     });
     $('.del_lift').click(function(){
         var data;

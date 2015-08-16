@@ -8,7 +8,7 @@ from django.core.context_processors import csrf
 from django.core.mail import send_mail
 # from django.contrib.flatpages.models import FlatPage
 from django.template import Context, loader 
-from datetime import datetime
+from datetime import datetime, timedelta
 # from django.utils import json
 
 @login_required
@@ -17,13 +17,14 @@ def list_otchet(request):
     # args.update(csrf(request))
     args['faults'] = s_fault.objects.select_related()
     args['lifts'] = s_drop_lift.objects.select_related()
+    # args['start_date'] = 
     args['username'] = request.user.last_name+' '+request.user.first_name
     return render_to_response('otchet.html', args)
 
 # TODO: Сделать нормально, без редиректа.
 @login_required
 def profile(request):
-    return redirect('/newpost/0/')
+    return redirect('/')
 
 @login_required
 def index(request):
@@ -34,32 +35,51 @@ def logout(request):
     return redirect('/accounts/login/')
 
 @login_required
-def newpost(request, postid=0):
+def newpost(request, postid=0, liftid=0):
     com = s_commit.objects.order_by('-id')[0] # получаем последний закоммиченный объект
+    postid = int(postid)
     args = {}
     args.update(csrf(request))
-    postid = int(postid)
+    # if request.GET:
+    #     postid = int(request.GET['data'])
     if postid:
         relative = get_object_or_404(s_fault, pk=postid)
-    if postid > com.s_fault_commit_id:
+        if postid > com.s_fault_commit_id:
         # b = s_fault.objects.filter(pk=postid).select_related()
         # for a in b:
             # args['form'] = s_faultForm(initial=a)
-        args['form'] = s_faultForm(initial={
-            'fault_time': relative.fault_time.strftime('%d.%m.%Y %H:%M'),
-            'f_system': relative.f_system,
-            's_object': relative.s_object,
-            'description': relative.description,
-            'correction': relative.correction,
-            })
-        args['buttonName'] = 'Записать'
-        args['postid'] = postid
+            args['form'] = s_faultForm(initial={
+                'fault_time': (relative.fault_time+timedelta(hours=5)).strftime('%d.%m.%Y %H:%M'),
+                'f_system': relative.f_system,
+                's_object': relative.s_object,
+                'description': relative.description,
+                'correction': relative.correction,
+                })
+            args['buttonName'] = 'Записать'
+            args['postid'] = postid
     else:
         args['form'] = s_faultForm
         args['buttonName'] = 'Добавить'
         args['postid'] = 0
+    liftid = int(liftid)
+    if liftid:
+        liftbd = get_object_or_404(s_drop_lift, pk=liftid)
+        if liftid > com.s_lift_commit_id:
+            args['lift_form'] = s_drop_liftForm(initial={
+                'stop_lift' : (liftbd.stop_lift+timedelta(hours=5)).strftime('%d.%m.%Y %H:%M'),
+                'start_lift' : (liftbd.start_lift+timedelta(hours=5)).strftime('%d.%m.%Y %H:%M'),
+                'lift_name': liftbd.lift_name,
+                'fault' : liftbd.fault,
+                'description' : liftbd.description,
+                'consequences' : liftbd.consequences,
+                })
+            args['button_lift_name'] = 'Записать'
+            args['liftid'] = liftid
+    else:
+        args['lift_form'] = s_drop_liftForm
+        args['button_lift_name'] = 'Добавить'
+        args['liftid'] = 0
     args['faults'] = s_fault.objects.select_related().filter(pk__gt=com.s_fault_commit_id)
-    args['lift_form'] = s_drop_liftForm
     args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt=com.s_lift_commit_id)
     args['commit_form'] = s_commitForm
     args['username'] = request.user.last_name+' '+request.user.first_name
@@ -76,7 +96,7 @@ def addpost(request):
             if postid:
                 npost.pk=postid
             form.save()
-    return redirect('/newpost/0/')
+    return redirect('/')
 
 @login_required
 def delpost(request, postid):
@@ -88,15 +108,19 @@ def delpost(request, postid):
         except:
             pass
 
-    return redirect('/newpost/0/')
+    return redirect('/')
 
 @login_required
 def addliftfault(request):
     if request.POST:
         form = s_drop_liftForm(request.POST)
         if form.is_valid:
-            nlift = form.save()
-    return redirect('/newpost/0/')
+            nlift = form.save(commit=False)
+            liftid = int(request.POST.get('liftid'))
+            if liftid:
+                nlift.pk=liftid
+            form.save()
+    return redirect('/')
 
 @login_required
 def newmail(request):
@@ -127,7 +151,7 @@ def newmail(request):
         s_prim = args['prim'],
         s_staff_commit = CustomUser.objects.get(username=request.user.username),)
     commit.save()
-    return redirect('/newpost/0/')
+    return redirect('/')
 
 @login_required
 def fault_correct(request):
@@ -144,7 +168,7 @@ def fault_correct(request):
         # context['text'] = 'error'
     # else:
         # context['text'] = data[::-1]
-    return redirect('/newpost/0/')
+    return redirect('/')
 
 @login_required
 def lift_del(request):
@@ -155,4 +179,4 @@ def lift_del(request):
         s_drop_lift.objects.get(pk=postid).delete()
     # except:
         # pass
-    return redirect('/newpost/0/')    
+    return redirect('/')    
