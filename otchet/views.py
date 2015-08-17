@@ -14,10 +14,22 @@ from datetime import datetime, timedelta
 @login_required
 def list_otchet(request):
     args = {}
-    # args.update(csrf(request))
-    args['faults'] = s_fault.objects.select_related()
-    args['lifts'] = s_drop_lift.objects.select_related()
-    # args['start_date'] = 
+    args.update(csrf(request))
+    faults = s_fault.objects.select_related()
+    lifts = s_drop_lift.objects.select_related()
+    if request.POST:
+        if request.POST.get('start_time'):
+            start_time = datetime.strptime(request.POST.get('start_time'), '%Y-%m-%dT%H:%M')
+            faults = faults.filter(fault_time__gte=start_time)
+            lifts = lifts.filter(stop_lift__gte=start_time)
+            args['start_time'] = request.POST.get('start_time')
+        if request.POST.get('stop_time'):
+            stop_time = datetime.strptime(request.POST.get('stop_time'), '%Y-%m-%dT%H:%M')
+            faults = faults.filter(fault_time__lte=stop_time)
+            lifts = lifts.filter(stop_lift__lte=stop_time)
+            args['stop_time'] = request.POST.get('stop_time')
+    args['faults'] = faults
+    args['lifts'] = lifts
     args['username'] = request.user.last_name+' '+request.user.first_name
     return render_to_response('otchet.html', args)
 

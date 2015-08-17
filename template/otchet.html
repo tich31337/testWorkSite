@@ -6,17 +6,24 @@
 
 <!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
 <!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
-<!-- <form action="/otchet/" method="get">
-    <div class="large-4 medium-4 columns">
-        <label for="id_start_time">Время начала:</label> 
-        <input id="id_start_time" type="datetime">
+<div class="row">
+<form action="/otchet/" id="myform" method="post">
+    {% csrf_token %}
+    <!-- <div class="row collapse"> -->
+    <div class="small-4 columns">
+        <!-- <label for="id_start_time">Время начала:</label>  -->
+        <input id="id_start_time" name="start_time" type="datetime-local" value="{{start_time}}">
     </div>
-    <div class="large-4 medium-4 columns">
-        <label for="id_stop_time">Время окончания:</label>
-        <input id="id_stop_time" type="datetime">
-    </div>
-        <input type="submit" class="button" value="Применить">
-</form> -->
+    <div class="small-4 columns">
+        <!-- <label for="id_stop_time">Время окончания:</label> -->
+        <input id="id_stop_time" name="stop_time" type="datetime-local" value="{{stop_time}}">
+    </div>  
+    <div class="small-2 columns">
+        <!-- <a href="#" onclick="document.getElementById('myform').submit(); return false;" class="button postfix">Применить</a> -->
+        <input type="submit" class="button postfix" value="Применить"></div><!-- </div> -->
+</form>
+</div>
+<!-- <p> start_time = {{start_time}}, stop_time = {{stop_time}}</p> -->
 
 {% if faults|length %}
 
