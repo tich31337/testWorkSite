@@ -3,6 +3,8 @@ from .models import CustomUser, s_group, s_office, s_timetable, s_fault, s_drop_
 from django import forms 
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from datetime import datetime
+# from worksite import settings
+import html5.forms.widgets as html5
 
 
 class AdminUserAddForm(UserCreationForm):
@@ -63,8 +65,26 @@ class s_faultForm(forms.ModelForm):
 class s_drop_liftForm(forms.ModelForm):
     # error_css_class = 'large-4 medium-4 columns'
     # required_css_class = 'large-4 medium-4 columns'
-    stop_lift = forms.DateTimeField(label = 'Время остановки', widget=forms.TextInput(attrs={'type': 'datetime', 'value': datetime.now().strftime('%d.%m.%Y %H:%M')}))
-    start_lift = forms.DateTimeField(label = 'Время запуска', widget=forms.TextInput(attrs={'type': 'datetime', 'value': datetime.now().strftime('%d.%m.%Y %H:%M')}))
+    stop_lift = forms.DateTimeField(
+        label = 'Время остановки', 
+        widget = forms.TextInput(attrs={
+            'type': 'datetime', 
+            # 'value': datetime.now().strftime('%d.%m.%Y %H:%M'),
+            }),
+        initial = datetime.now().strftime('%d.%m.%Y %H:%M'),
+        # input_formats = '%Y-%m-%dT%H:%M',
+        )
+    start_lift = forms.DateTimeField(
+        label = 'Время запуска',
+        # widget = { 'thedate' : html5.DateTimeLocalInput }
+        widget=forms.TextInput(attrs={
+            'type': 'datetime', 
+            # 'value': datetime.now().strftime('%d.%m.%Y %H:%M'),
+            }),
+        initial = datetime.now().strftime('%d.%m.%Y %H:%M'),
+        # input_formats = '%Y-%m-%dT%H:%M',
+        # input_formats = settings.DATE_INPUT_FORMATS,
+        )
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': '2'}), label='Описание:', )
     class Meta:
         model   = s_drop_lift

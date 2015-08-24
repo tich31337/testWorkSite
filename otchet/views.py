@@ -8,28 +8,28 @@ from django.core.context_processors import csrf
 from django.core.mail import send_mail
 # from django.contrib.flatpages.models import FlatPage
 from django.template import Context, loader 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 # from django.utils import json
 
 @login_required
-def list_otchet(request):
+def list_otchet(request, start_time=date.today()-timedelta(days=1), stop_time=date.today()+timedelta(days=1)):
     args = {}
-    args.update(csrf(request))
-    faults = s_fault.objects.select_related()
-    lifts = s_drop_lift.objects.select_related()
-    if request.POST:
-        if request.POST.get('start_time'):
-            start_time = datetime.strptime(request.POST.get('start_time'), '%Y-%m-%dT%H:%M')
-            faults = faults.filter(fault_time__gte=start_time)
-            lifts = lifts.filter(stop_lift__gte=start_time)
-            args['start_time'] = request.POST.get('start_time')
-        if request.POST.get('stop_time'):
-            stop_time = datetime.strptime(request.POST.get('stop_time'), '%Y-%m-%dT%H:%M')
-            faults = faults.filter(fault_time__lte=stop_time)
-            lifts = lifts.filter(stop_lift__lte=stop_time)
-            args['stop_time'] = request.POST.get('stop_time')
-    args['faults'] = faults
-    args['lifts'] = lifts
+    # args.update(csrf(request))
+    # faults = s_fault.objects.select_related()
+    # lifts = s_drop_lift.objects.select_related()
+    if request.GET:
+        if request.GET.get('start_time'):
+            start_time = datetime.strptime(request.GET.get('start_time'), '%Y-%m-%dT%H:%M')
+        if request.GET.get('stop_time'):
+            stop_time = datetime.strptime(request.GET.get('stop_time'), '%Y-%m-%dT%H:%M')
+    args['start_time'] = start_time.strftime('%Y-%m-%dT%H:%M')
+    args['stop_time'] = stop_time.strftime('%Y-%m-%dT%H:%M')
+    args['faults'] = s_fault.objects.filter(fault_time__gte=start_time, fault_time__lte=stop_time)
+    args['lifts'] = s_drop_lift.objects.filter(stop_lift__gte=start_time, stop_lift__lte=stop_time)
+    # faults = faults.filter(fault_time__lte=stop_time)
+    # lifts = lifts.filter(stop_lift__lte=stop_time)
+    # args['faults'] = faults
+    # args['lifts'] = lifts
     args['username'] = request.user.last_name+' '+request.user.first_name
     return render_to_response('otchet.html', args)
 
@@ -61,6 +61,7 @@ def newpost(request, postid=0, liftid=0):
         # for a in b:
             # args['form'] = s_faultForm(initial=a)
             args['form'] = s_faultForm(initial={
+                # 'fault_time': (relative.fault_time+timedelta(hours=5)).strftime('%d.%m.%Y %H:%M'),
                 'fault_time': (relative.fault_time+timedelta(hours=5)).strftime('%d.%m.%Y %H:%M'),
                 'f_system': relative.f_system,
                 's_object': relative.s_object,
@@ -125,12 +126,19 @@ def delpost(request, postid):
 @login_required
 def addliftfault(request):
     if request.POST:
-        form = s_drop_liftForm(request.POST)
+        # request.POST['start_lift'] = datetime.strptime(request.POST.get('start_lift'),'%Y-%m-%dT%H:%M')
+        test = request.POST.copy()
+        # test['start_lift'] = '2007-07-07 07:07'
+        # test['start_lift'] = datetime.strptime(str(test['start_lift']), '%Y-%m-%dT%H:%M')
+        # test['start_lift'] = str(test['start_lift'])[:9]+' '+str(test['start_lift'])[11:]
+        # '2015-08-20T14:46'
+        form = s_drop_liftForm(test)
+        # form['start_lift'] = test
         if form.is_valid:
             nlift = form.save(commit=False)
             liftid = int(request.POST.get('liftid'))
             if liftid:
-                nlift.pk=liftid
+                nlift.pk = liftid
             form.save()
     return redirect('/')
 
@@ -151,8 +159,8 @@ def newmail(request):
             args['prim'] = request.POST['s_prim']
     body_html = t.render(Context(args))
     send_mail(
-        'Сдача смены',
-        'Сменный инженер',
+        'Сдача смены '+ datetime.today(),
+        args['username'],
         '5704@koltsovo.ru',
         ['tich31337@gmail.com',],
         html_message=body_html,)
