@@ -7,3 +7,4 @@ otchet/migrations/
 */__pycashe__/
 */__pycashe__
 *.pyc
+*.sublime*
