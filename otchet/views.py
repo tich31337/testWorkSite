@@ -1,12 +1,10 @@
-from django.shortcuts import render, render_to_response, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import s_fault, CustomUser, s_commit, s_drop_lift, s_system, s_lift, s_fault_lift
-from .forms import s_faultForm, s_drop_liftForm, s_commitForm, SMForm
+from .models import s_fault, CustomUser, s_commit, s_drop_lift, s_system, s_fault_lift
+from .forms import s_faultForm, s_drop_liftForm, s_commitForm
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
-# from django.contrib.flatpages.models import FlatPage
 from django.template import Context, loader
 from datetime import datetime, timedelta, date
 
@@ -63,12 +61,11 @@ def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetim
                                                               stop_lift__gte = start_time,
                                                               stop_lift__lte = stop_time, ).count()
     # print(fault_count)
-    # args['f_count'] = list(fault_count.keys()).sort()
-    # args['l_count'] = list(lift_count.keys()).sort()
+    args['f_count'] = list(fault_count.keys()).sort()
+    args['l_count'] = list(lift_count.keys()).sort()
     args['fault_count'] = fault_count
     args['lift_count'] = lift_count
     return render_to_response('otchet_td.html', args)
-
 
 
 # TODO: Сделать нормально, без редиректа.
@@ -204,7 +201,7 @@ def newmail(request):
             args['prim'] = request.POST['s_prim']
     body_html = t.render(Context(args))
     send_mail(
-        'Сдача смены ' + str(datetime.today()) + args['username'],
+        'Сдача смены ' + str(date.today()) + ' ' + args['username'],
         args['username'],
         '5704@koltsovo.ru',
         ['tich31337@gmail.com', ],

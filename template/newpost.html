@@ -20,7 +20,7 @@
         <th>Описание</th>
         {% for fault in faults %}
             <tr class="main">
-                <td>{{fault.fault_time|date:'d E y г.'}}</td>
+                <td>{{fault.fault_time|date:'d/m/y'}}</td>
                 <td>{{fault.fault_time|date:'H:i'}}</td>
                 <td>{{fault.f_system}}</td>
                 <td>{{fault.s_object}}</td>
@@ -103,7 +103,7 @@
         <th colspan="2">Описание</th>
         {% for lift in lifts %}
             <tr class="main">
-                <td>{{lift.stop_lift|date:'d E y г.'}}</td>
+                <td>{{lift.stop_lift|date:'d/m/y'}}</td>
                 <td>{{lift.stop_lift|date:'H:i'}}</td>
                 <td>{{lift.start_lift|date:'H:i'}}</td>
                 <td>{{lift.lift_name}}</td>
