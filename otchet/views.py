@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import s_fault, CustomUser, s_commit, s_drop_lift
+from .models import s_fault, CustomUser, s_commit, s_drop_lift, s_system, s_lift, s_fault_lift
 from .forms import s_faultForm, s_drop_liftForm, s_commitForm, SMForm
 from django.contrib import auth
 from django.core.context_processors import csrf
@@ -35,6 +35,40 @@ def list_otchet(request, start_time = date.today() - timedelta(days = 1),
     # args['lifts'] = lifts
     args['username'] = request.user.last_name + ' ' + request.user.first_name
     return render_to_response('otchet.html', args)
+
+@login_required
+def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetime.weekday(date.today())),
+                stop_time = date.today() - timedelta(days = 3 + datetime.weekday(date.today()))):
+    args = {}
+    if request.GET:
+        if request.GET.get('start_time'):
+            start_time = datetime.strptime(request.GET.get('start_time'), '%Y-%m-%dT%H:%M')
+        if request.GET.get('stop_time'):
+            stop_time = datetime.strptime(request.GET.get('stop_time'), '%Y-%m-%dT%H:%M')
+    args['start_time'] = start_time.strftime('%Y-%m-%dT%H:%M')
+    args['stop_time'] = stop_time.strftime('%Y-%m-%dT%H:%M')
+    args['fire'] = s_fault.objects.filter(fault_time__gte = start_time, fault_time__lte = stop_time, f_system = 1,)
+    args['lifts'] = s_drop_lift.objects.filter(stop_lift__gte = start_time, stop_lift__lte = stop_time, fault_id = 1,)
+    args['username'] = request.user.last_name + ' ' + request.user.first_name
+    fault_sys = s_system.objects.all()
+    lift = s_fault_lift.objects.all()
+    fault_count ={}
+    lift_count ={}
+    for fau in fault_sys:
+        fault_count[fau.system_name] = s_fault.objects.filter(f_system__system_name = fau.system_name,
+                                                              fault_time__gte = start_time,
+                                                              fault_time__lte = stop_time, ).count()
+    for l in lift:
+        lift_count[l.type_fault] = s_drop_lift.objects.filter(fault__type_fault = l.type_fault,
+                                                              stop_lift__gte = start_time,
+                                                              stop_lift__lte = stop_time, ).count()
+    # print(fault_count)
+    # args['f_count'] = list(fault_count.keys()).sort()
+    # args['l_count'] = list(lift_count.keys()).sort()
+    args['fault_count'] = fault_count
+    args['lift_count'] = lift_count
+    return render_to_response('otchet_td.html', args)
+
 
 
 # TODO: Сделать нормально, без редиректа.

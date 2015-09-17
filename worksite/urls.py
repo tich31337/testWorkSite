@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^accounts/profile/$', profile), 
     url(r'^index/$', index),
     url(r'^otchet/$', list_otchet),
+    url(r'^otchet_td/$', otchet_td),
     # url(r'^newpost/(\d{1,6})/$', newpost),
     url(r'^newpost/(?P<postid>\d{1,6})/(?P<liftid>\d{1,6})/$', newpost),
     url(r'^delpost/(\d{1,6})/$', delpost),

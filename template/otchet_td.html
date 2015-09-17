@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}
+    Отчет
+{% endblock title %}
+{% block content %}
+
+    <!-- TODO: реализовать возможность выбора временного промежутка для отчета -->
+    <!-- TODO: выполнить итоговую таблицу с подсчетом количества сбоев по конкретным данным -->
+    <div class="row">
+        <form action="/otchet_td/" id="myform" method="get">
+            {#    {% csrf_token %}#}
+            <!-- <div class="row collapse"> -->
+            <div class="small-4 columns">
+                <!-- <label for="id_start_time">Время начала:</label>  -->
+                <input id="id_start_time" name="start_time" type="datetime-local" value="{{ start_time }}">
+            </div>
+            <div class="small-4 columns">
+                <!-- <label for="id_stop_time">Время окончания:</label> -->
+                <input id="id_stop_time" name="stop_time" type="datetime-local" value="{{ stop_time }}">
+            </div>
+            <div class="small-2 columns">
+                <!-- <a href="#" onclick="document.getElementById('myform').submit(); return false;" class="button postfix">Применить</a> -->
+                <input type="submit" class="button postfix" value="Применить"></div>
+            <!-- </div> -->
+        </form>
+    </div>
+    <!-- <p> start_time = {{start_time}}, stop_time = {{stop_time}}</p> -->
+
+    {% if fire|length %}
+
+        <h3>Сигнал "Пожар":</h3>
+        <table border="0">
+            <col width="100">
+            <col width="20">
+            <col width="220">
+            {#        <col width="150">#}
+            <th>Дата</th>
+            <th>Время</th>
+            {#        <th>Система</th>#}
+            <th>Объект</th>
+            <th>Описание</th>
+            {#        <th>Пользователь</th>#}
+            {% for fault in fire %}
+                <tr>
+                    <td>{{ fault.fault_time|date:'d.m.y' }}</td>
+                    <td>{{ fault.fault_time|date:'H:i' }}</td>
+                    {#                <td>{{fault.f_system}}</td>#}
+                    <td>{{ fault.s_object }}</td>
+                    <td>{{ fault.description }}</td>
+                    {#                <td>{{fault.f_staff.last_name}} {{fault.f_staff.first_name|first}}.{{fault.f_staff.patronymic|first}}.</td>#}
+                </tr>
+                {% if forloop.last %}
+                    <tr>
+                        <td colspan="6">Количество: {{ forloop.counter }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Происшествий нет</p>
+    {% endif %}
+
+    <h3>Падения:</h3>
+    <div>
+        <table class="large-12">
+            <col width="130">
+            {#        <col width="20">#}
+            {#        <col width="20">#}
+            <col width="200">
+            {#        <col width="230">#}
+            <th>Дата</th>
+            {#        <th>Время</th>#}
+            <th>Эскалатор</th>
+            {#        <th>Происшествие</th>#}
+            <th>Описание</th>
+            {% for lift in lifts %}
+                <tr class="main">
+                    <td>{{ lift.stop_lift|date:'d.m.y H:i' }}</td>
+                    {#                <td>{{lift.stop_lift|date:'H:i'}}</td>#}
+                    {#                <td>{{lift.start_lift|date:'H:i'}}</td>#}
+                    <td>{{ lift.lift_name }}</td>
+                    {#                <td>{{lift.fault}}</td>#}
+                    <td>{{ lift.description }} {% if lift.consequences %}Без посл. {% endif %}</td>
+                </tr>
+                {% if forloop.last %}
+                    <tr>
+                        <td colspan="7">Количество: {{ forloop.counter }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+    <h3>Прочие происшествия:</h3>
+    <div>
+        <table class="large-12">
+            <th>Система</th>
+            <th>Количество</th>
+            {% for key, value in fault_count.items %}
+                {% if value %}
+                    <tr class="main">
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endif %}
+                {#            <td>{{ foo. }}</td>#}
+            {% endfor %}
+            <tr>
+                <td colspan="2"><strong>Остановка лифтов/эскалаторов по причине:</strong></td>
+            </tr>
+            {% for key, value in lift_count.items %}
+                {% if  value %}
+                    <tr class="main">
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+
+        </table>
+    </div>
+{% endblock content %}
