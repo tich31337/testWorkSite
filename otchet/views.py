@@ -7,6 +7,7 @@ from django.core.context_processors import csrf
 from django.core.mail import send_mail
 from django.template import Context, loader
 from datetime import datetime, timedelta, date
+from collections import OrderedDict
 
 
 # from django.utils import json
@@ -61,10 +62,10 @@ def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetim
                                                               stop_lift__gte = start_time,
                                                               stop_lift__lte = stop_time, ).count()
     # print(fault_count)
-    args['f_count'] = list(fault_count.keys()).sort()
-    args['l_count'] = list(lift_count.keys()).sort()
-    args['fault_count'] = fault_count
-    args['lift_count'] = lift_count
+    # args['f_count'] = list(fault_count.keys()).sort()
+    # args['l_count'] = list(lift_count.keys()).sort()
+    args['fault_count'] = OrderedDict(sorted(fault_count.items(), key=lambda t: t[0]))
+    args['lift_count'] = OrderedDict(sorted(lift_count.items(), key=lambda t: t[0]))
     return render_to_response('otchet_td.html', args)
 
 

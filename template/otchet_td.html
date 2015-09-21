@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load filters_list %}
+{#{% load filters_list %}#}
 {% block title %}
     Отчет
 {% endblock title %}
@@ -30,7 +30,7 @@
     {% if fire|length %}
 
         <h3>Сигнал "Пожар":</h3>
-        <table border="0">
+        <table class="large-12">
             <col width="100">
             <col width="20">
             <col width="220">
