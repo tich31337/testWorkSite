@@ -39,3 +39,15 @@
     /*left: 400px;*/
     /*font: 20px;*/
 }
+
+.main .milConnection{
+    background-color: #C2FCA1;
+}
+
+.main:hover .milConnection{
+    background-color: #22B116;
+}
+
+span.anchor:hover{
+    cursor: pointer;
+}

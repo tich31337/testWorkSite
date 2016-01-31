@@ -2,6 +2,8 @@
 /otchet/migrations/*
 /work_nginx.conf
 /db.sqlite3
+*/migrations/
+*/migrations/*
 otchet/migrations/*
 otchet/migrations/
 */__pycashe__/

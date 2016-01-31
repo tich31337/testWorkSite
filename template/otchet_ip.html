@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{#{% load filters_list %}#}
+{% block title %}
+    Отчет
+{% endblock title %}
+{% block content %}
+    <div class="row">
+        {#    {{ dicta }}#}
+        <table class="large-12">
+            <th></th>
+            <th>IP</th>
+            <th>Пользователь</th>
+            {% for sd in setDate %}
+            	<th>{{ sd }}</th>
+            {% endfor %}
+
+{#            <th>Количество</th>#}
+            {% for foo in list %}
+                <tr class="main">
+                    <td class="check">
+                        {% if foo.validIP %}
+                            <span dtUser="{{ foo.lUser }}" dtIP="{{ foo.lIP }}" class="anchor chMil fi-check chk"></span>
+                        {% else %}
+                            <span dtUser="{{ foo.lUser }}" dtIP="{{ foo.lIP }}" class="anchor chMil fi-check nochk"></span>
+                        {% endif %}
+                    </td>
+                    <td>{{ foo.lIP }}</td>
+                    <td>{{ foo.lUser }}</td>
+                    {% for f in foo.dataCount %}
+                        <td {% if f %}
+                            class="milConnection" title="{{ f }}"
+                        {% endif %} ></td>
+                    {% endfor %}
+
+                </tr>
+            {% endfor %}
+        </table>
+    {{ get_full_name }}
+    </div>
+{% endblock content %}

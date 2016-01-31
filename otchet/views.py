@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import s_fault, CustomUser, s_commit, s_drop_lift, s_system, s_fault_lift
 from .forms import s_faultForm, s_drop_liftForm, s_commitForm
@@ -8,6 +8,8 @@ from django.core.mail import send_mail
 from django.template import Context, loader
 from datetime import datetime, timedelta, date
 from collections import OrderedDict
+from django.template import RequestContext
+
 
 
 # from django.utils import json
@@ -32,8 +34,8 @@ def list_otchet(request, start_time = date.today() - timedelta(days = 1),
     # lifts = lifts.filter(stop_lift__lte=stop_time)
     # args['faults'] = faults
     # args['lifts'] = lifts
-    args['username'] = request.user.last_name + ' ' + request.user.first_name
-    return render_to_response('otchet.html', args)
+    # args['username'] = request.user.get_full_name()
+    return render_to_response('otchet.html', args, context_instance=RequestContext(request))
 
 @login_required
 def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetime.weekday(date.today())),
@@ -48,7 +50,7 @@ def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetim
     args['stop_time'] = stop_time.strftime('%Y-%m-%dT%H:%M')
     args['fire'] = s_fault.objects.filter(fault_time__gte = start_time, fault_time__lte = stop_time, f_system = 1,)
     args['lifts'] = s_drop_lift.objects.filter(stop_lift__gte = start_time, stop_lift__lte = stop_time, fault_id = 1,)
-    args['username'] = request.user.last_name + ' ' + request.user.first_name
+    # args['username'] = request.user.get_full_name()
     fault_sys = s_system.objects.all()
     lift = s_fault_lift.objects.all()
     fault_count ={}
@@ -66,7 +68,7 @@ def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetim
     # args['l_count'] = list(lift_count.keys()).sort()
     args['fault_count'] = OrderedDict(sorted(fault_count.items(), key=lambda t: t[0]))
     args['lift_count'] = OrderedDict(sorted(lift_count.items(), key=lambda t: t[0]))
-    return render_to_response('otchet_td.html', args)
+    return render_to_response('otchet_td.html', args, context_instance=RequestContext(request))
 
 
 # TODO: Сделать нормально, без редиректа.
@@ -77,7 +79,7 @@ def profile(request):
 
 @login_required
 def index(request):
-    return render_to_response('index.html', )
+    return render_to_response('index.html', context_instance=RequestContext(request))
 
 
 def logout(request):
@@ -134,8 +136,8 @@ def newpost(request, postid = 0, liftid = 0):
     args['faults'] = s_fault.objects.select_related().filter(pk__gt = com.s_fault_commit_id)
     args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt = com.s_lift_commit_id)
     args['commit_form'] = s_commitForm
-    args['username'] = request.user.last_name + ' ' + request.user.first_name
-    return render_to_response('newpost.html', args)
+    # args['username'] = request.user.get_full_name()
+    return render_to_response('newpost.html', args, context_instance=RequestContext(request))
 
 
 @login_required
@@ -153,6 +155,7 @@ def addpost(request):
                 npost.pk = postid
             form.save()
     return redirect('/')
+    # TODO: сделать через AJAX
     # return render_to_response('newpost.html', locals())
 
 
@@ -166,8 +169,8 @@ def delpost(request, postid):
         except:
             pass
 
-    return redirect('/')
-
+    # return redirect('/')
+    return HttpResponse('Ok')
 
 @login_required
 def addliftfault(request):
@@ -183,7 +186,8 @@ def addliftfault(request):
                 nlift.pk = liftid
             form.save()
     return redirect('/')
-
+    # TODO: сделать без редиректа, через AJAX
+    # return HttpResponse('Ok')
 
 @login_required
 def newmail(request):
@@ -193,7 +197,7 @@ def newmail(request):
     args = {}
     args['faults'] = s_fault.objects.select_related().filter(pk__gt = com.s_fault_commit_id)
     args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt = com.s_lift_commit_id)
-    args['username'] = request.user.last_name + ' ' + request.user.first_name
+    args['username'] = request.user.get_full_name()
     args['d_otch'] = datetime.now()
     args['prim'] = ''
     if request.POST:
@@ -214,8 +218,8 @@ def newmail(request):
         s_prim = args['prim'],
         s_staff_commit = CustomUser.objects.get(username = request.user.username), )
     commit.save()
-    return redirect('/')
-
+    # return redirect('/')
+    return HttpResponse('Ok')
 
 @login_required
 def fault_correct(request):
@@ -232,8 +236,8 @@ def fault_correct(request):
         # context['text'] = 'error'
         # else:
         # context['text'] = data[::-1]
-    return redirect('/')
-
+    # return redirect('/')
+    return HttpResponse('Ok')
 
 @login_required
 def lift_del(request):
@@ -244,4 +248,5 @@ def lift_del(request):
         s_drop_lift.objects.get(pk = postid).delete()
         # except:
         # pass
-    return redirect('/')
+    # return redirect('/')
+    return HttpResponse('Ok')

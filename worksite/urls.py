@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
-from otchet.views   import * 
+from otchet.views   import *
+from milestone.views import milestoneOtchet, milestoneBD, milestoneValid
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -35,4 +36,9 @@ urlpatterns = [
     url(r'^$', newpost),
     url(r'^faultcorrect/$', fault_correct),
     url(r'^liftdel/$', lift_del),
+    # отчет подключений milestone
+    url(r'^otchetip/$', milestoneOtchet),
+    url(r'^otchetbd/(?P<bdSort>\d{1})/$', milestoneBD),
+    url(r'^otchetbd/', milestoneBD),
+    url(r'^validip/$', milestoneValid),
 ]
