@@ -10,3 +10,4 @@ otchet/migrations/
 */__pycashe__
 *.pyc
 *.sublime*
+/sftp-config.json
