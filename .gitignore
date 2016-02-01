@@ -8,6 +8,14 @@ otchet/migrations/*
 otchet/migrations/
 */__pycashe__/
 */__pycashe__
+/.uwsgi_plugins_builder
 *.pyc
 *.sublime*
+/default
+/uwsgi_params
+/worksite_uwsgi.ini
+/worksite.sh
+/touchme
+/touch
+/mysite_uwsgi.ini
 /sftp-config.json
