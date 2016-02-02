@@ -14,6 +14,11 @@ class Command(BaseCommand):
         for i in a:
             mu, vh1 = MilestoneUser.objects.get_or_create(loginName = i['lUser'])
             ip, vh2 = sysSec.objects.get_or_create(ipAddress = i['lIP'])
-            MilLogin.objects.get_or_create(lUser = mu, lIP = ip, lQuant = i['lQuant'], lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
-
-        # self.stdout.write('Success!')
+            try:
+                baseLogin = MilLogin.objects.get(lUser = mu, lIP = ip, lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
+                if baseLogin.lQuant != int(i['lQuant']):
+                    baseLogin.lQuant = int(i['lQuant'])
+            except MilLogin.DoesNotExist:
+                b = MilLogin(lUser = mu, lIP = ip, lQuant = i['lQuant'], lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
+                b.save()
+# self.stdout.write('Success!')
