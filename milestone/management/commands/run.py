@@ -18,6 +18,7 @@ class Command(BaseCommand):
                 baseLogin = MilLogin.objects.get(lUser = mu, lIP = ip, lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
                 if baseLogin.lQuant != int(i['lQuant']):
                     baseLogin.lQuant = int(i['lQuant'])
+                    baseLogin.save()
             except MilLogin.DoesNotExist:
                 b = MilLogin(lUser = mu, lIP = ip, lQuant = i['lQuant'], lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
                 b.save()
