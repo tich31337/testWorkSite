@@ -6,7 +6,6 @@ from milestone.models import MilestoneUser, MilLogin, sysSec
 from datetime import datetime
 import requests
 
-
 class Command(BaseCommand):
     def handle(self, *args, **options):
         resp = requests.post('http://192.168.16.200:5000/users')
@@ -21,7 +20,6 @@ class Command(BaseCommand):
                     baseLogin.lQuant = int(i['lQuant'])
                     baseLogin.save()
             except MilLogin.DoesNotExist:
-                b = MilLogin(lUser = mu, lIP = ip, lQuant = i['lQuant'],
-                             lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
+                b = MilLogin(lUser = mu, lIP = ip, lQuant = i['lQuant'], lDate = datetime.strptime(i['lDate'], '%Y%m%d'))
                 b.save()
-                # self.stdout.write('Success!')
+# self.stdout.write('Success!')

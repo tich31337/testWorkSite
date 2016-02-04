@@ -218,8 +218,8 @@ def newmail(request):
         s_prim = args['prim'],
         s_staff_commit = CustomUser.objects.get(username = request.user.username), )
     commit.save()
-    # return redirect('/')
-    return HttpResponse('Ok')
+    return redirect('/accounts/logout/')
+    # return HttpResponse('Ok')
 
 @login_required
 def fault_correct(request):
