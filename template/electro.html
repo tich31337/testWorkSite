@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+    Отчет электропотребления
+{% endblock title %}
+{% block content %}
+{#    <div class="row">#}
+    <table class="large-12">
+        <col width="500">
+{#        <th>Дата</th>#}
+{#        <th>Счетчик</th>#}
+        {% for foo in strDate %}
+        	<th>{{ foo }}</th>
+        {% endfor %}
+
+{#        <th>кВТ</th>#}
+        {% for foo in el %}
+        	<tr class="main">
+{#            <td>{{ foo }}</td>#}
+                {% for f in foo %}
+                	<td>{{ f }}</td>
+                {% endfor %}
+{##}
+{#            <td>{{ foo.eDate }}</td>#}
+{#            <td>{{ foo.eId }}</td>#}
+{#            <td>{{ foo.ekwt }}</td>#}
+            </tr>
+        {% endfor %}
+
+    </table>
+{#    </div>#}
+{% endblock content %}

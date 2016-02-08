@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.contrib.auth.views import login
 from otchet.views   import *
 from milestone.views import milestoneOtchet, milestoneBD, milestoneValid
+from electro.views import electro1
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -41,4 +42,6 @@ urlpatterns = [
     url(r'^otchetbd/(?P<bdSort>\d{1})/$', milestoneBD),
     url(r'^otchetbd/', milestoneBD),
     url(r'^validip/$', milestoneValid),
+    # отчет потребления электроэнергии
+    url(r'^electro/$', electro1),
 ]

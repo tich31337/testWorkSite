@@ -37,6 +37,9 @@
                 {% if perms.milestone.can_read_ml %}
                     <li><a href="/otchetbd/">Пользователи Milestone</a></li>
                 {% endif %}
+                {% if perms.electro.can_read_electro %}
+                    <li><a href="/electro/">Потребление электроэнергии</a></li>
+                {% endif %}
             </ul>
         </section>
     </nav>

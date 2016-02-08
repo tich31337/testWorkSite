@@ -7,13 +7,13 @@ class energosfera(models.Model):
     class Meta:
         verbose_name        = 'Потребление'
         verbose_name_plural = 'Потребление'
-        ordering = ['eDate',]
+        ordering = ['eDate', 'eId']
         permissions = (('can_read_electro', 'Потребление'),)
 
     def __str__(self):
-        return '%s %s %s' % self.ekwt, self.eId, self.eDate
+        return '{} {} {} кВт'.format(self.eDate, self.eId, self.ekwt)
 
-    ekwt = models.IntegerField(verbose_name = 'Потребление',)
+    ekwt = models.FloatField(verbose_name = 'Потребление',)
     eId = models.ForeignKey('nameCount',verbose_name = 'Счетчик')
     eDate = models.DateTimeField(verbose_name = 'Время',)
     
