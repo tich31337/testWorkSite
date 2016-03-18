@@ -3,29 +3,30 @@
     Отчет электропотребления
 {% endblock title %}
 {% block content %}
+    {{ el|safe }}
 {#    <div class="row">#}
     <table class="large-12">
-        <col width="500">
+{#        <col width="500">#}
 {#        <th>Дата</th>#}
 {#        <th>Счетчик</th>#}
-        {% for foo in strDate %}
-        	<th>{{ foo }}</th>
-        {% endfor %}
+{#        {% for foo in el %}#}
+{#        	<th>{{ foo }}</th>#}
+{#        {% endfor %}#}
 
 {#        <th>кВТ</th>#}
-        {% for foo in el %}
-        	<tr class="main">
+{#        {% for foo in el %}#}
+{#        	<tr class="main">#}
 {#            <td>{{ foo }}</td>#}
-                {% for f in foo %}
-                	<td>{{ f }}</td>
-                {% endfor %}
+{#                {% for f in foo %}#}
+{#                	<td>{{ f }}</td>#}
+{#                {% endfor %}#}
 {##}
 {#            <td>{{ foo.eDate }}</td>#}
 {#            <td>{{ foo.eId }}</td>#}
 {#            <td>{{ foo.ekwt }}</td>#}
-            </tr>
-        {% endfor %}
+{#            </tr>#}
+{#        {% endfor %}#}
 
-    </table>
+{#    </table>#}
 {#    </div>#}
 {% endblock content %}

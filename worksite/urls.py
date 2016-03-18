@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth.views import login
 from otchet.views   import *
 from milestone.views import milestoneOtchet, milestoneBD, milestoneValid
-from electro.views import electro1
+from electro.views import electro2
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -43,5 +43,5 @@ urlpatterns = [
     url(r'^otchetbd/', milestoneBD),
     url(r'^validip/$', milestoneValid),
     # отчет потребления электроэнергии
-    url(r'^electro/$', electro1),
+    url(r'^electro/$', electro2),
 ]
