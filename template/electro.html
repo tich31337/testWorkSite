@@ -1,20 +1,42 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block title %}
     Отчет электропотребления
 {% endblock title %}
 {% block content %}
-    {{ el|safe }}
+    <div class="row">
+        <form action="/electro/" id="myform" method="get">
+            <div class="small-4 columns">
+                <!-- <label for="id_start_time">Время начала:</label>  -->
+                <input id="id_start_time" name="start_time" type="date" value="{{ start_time }}">
+            </div>
+            <div class="small-4 columns">
+                <!-- <label for="id_stop_time">Время окончания:</label> -->
+                <input id="id_stop_time" name="stop_time" type="date" value="{{ stop_time }}">
+            </div>
+            <div class="small-2 columns">
+                <!-- <a href="#" onclick="document.getElementById('myform').submit(); return false;" class="button postfix">Применить</a> -->
+                <input type="submit" class="button postfix" value="Применить"></div>
+            <!-- </div> -->
+        </form>
+    </div>
+
+    <div class="row">
+        {{ el|safe }}
+    </div>
+
+{#    {{ el2 }}#}
 {#    <div class="row">#}
-    <table class="large-12">
+{#    <table class="large-12">#}
 {#        <col width="500">#}
 {#        <th>Дата</th>#}
 {#        <th>Счетчик</th>#}
-{#        {% for foo in el %}#}
+{#        {% for foo in e2 %}#}
 {#        	<th>{{ foo }}</th>#}
 {#        {% endfor %}#}
 
 {#        <th>кВТ</th>#}
-{#        {% for foo in el %}#}
+{#        {% for foo in el2 %}#}
 {#        	<tr class="main">#}
 {#            <td>{{ foo }}</td>#}
 {#                {% for f in foo %}#}
@@ -29,4 +51,6 @@
 
 {#    </table>#}
 {#    </div>#}
+    <script type="text/javascript" src="{% static 'js/electro.js' %}"></script>
+
 {% endblock content %}

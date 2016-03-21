@@ -38,8 +38,26 @@ from .models import energosfera,nameCount
 #     return render_to_response('electro.html',args, context_instance=RequestContext(request))
 
 @permission_required('electro.can_read_electro')
-def electro2(request):
+def electro2(request, date1 = datetime.today(), date2 = datetime.today()-timedelta(days = 7)):
+    try:
+        if request.GET:
+            if request.GET.get('start_time'):
+                date2 = datetime.strptime(request.GET.get('start_time'), '%Y-%m-%d')
+            if request.GET.get('stop_time'):
+                date1 = datetime.strptime(request.GET.get('stop_time'), '%Y-%m-%d')
+    except:
+        pass
+    if date1 > datetime.today():
+        date1 = datetime.today()
+    if date2 > datetime.today():
+        date2 = datetime.today()
+    if date2 > date1:
+        date1 = date2
+    # date1 = datetime.today()
+    # date2=datetime.today()-timedelta(days=7)
     args = {}
+    args['start_time'] = date2.strftime('%Y-%m-%d')
+    args['stop_time'] = date1.strftime('%Y-%m-%d')
     dsn = 'energosource'
     # dsn = 'sqlserver'
     user = 'SUDIO'
@@ -51,12 +69,17 @@ def electro2(request):
 
     # energosfera = pyodbc.connect('DRIVER={FreeTDS};SERVER=192.168.80.4;DATABASE=sudio_perm;UID=SUDIO;PWD=Gnbks877N')
     # cursor = energosfera.cursor()
-    d2 = datetime.today() - timedelta(7)
+    # d2 = datetime.today() - timedelta(7)
     nameCount = pd.read_csv("electro/name2.csv", error_bad_lines=False, sep=';')
     # d2 = date(2015, 12,3)
     qwery2 = "SELECT ID_PP, (CAST(M as varchar(2)) + '/' + CAST(D as varchar(2)) + '/' + CAST(Y as varchar(4))) AS date, "\
-                +"(CAST(H as varchar(2))+':00') as time,  value FROM PP_hours WHERE Y >="\
-                +d2.strftime('%Y')+" AND M >="+d2.strftime('%m')+" AND D >="+d2.strftime('%d')
+                +"(CAST(H as varchar(2))+':00') as time,  value FROM PP_hours WHERE " \
+                "Y >="+date2.strftime('%Y')+\
+                " AND M >="+date2.strftime('%m')+\
+                " AND D >="+date2.strftime('%d')+\
+                " AND Y <="+date1.strftime('%Y')+\
+                " AND M <="+date1.strftime('%m')+\
+                " AND D <="+date1.strftime('%d')
     kt = pd.read_sql(qwery2, energosfera)
     kt.date = kt.date.apply(pd.to_datetime)
     kt = pd.merge(nameCount, kt, on='ID_PP')
@@ -65,6 +88,7 @@ def electro2(request):
     # d3 = d3.unstack('Наименование')
     d3 = d3.unstack('date')
     args['el'] = d3.round(2).to_html()
+    # args['el2'] = [d3.round(2).to_csv()]
     # print(args['el'])
 
     return render_to_response('electro.html',args, context_instance=RequestContext(request))
