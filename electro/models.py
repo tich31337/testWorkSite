@@ -30,3 +30,16 @@ class nameCount(models.Model):
     nCount = models.CharField('Название', max_length=50)
     nId = models.IntegerField(verbose_name = 'Идентификатор', unique = True)
     nBuild = models.ForeignKey('otchet.s_objects',verbose_name = 'Объект', blank = True, null = True)
+
+class fltt(models.Model):
+
+    class Meta:
+        verbose_name        = 'fltt'
+        verbose_name_plural = 'fltt'
+
+    def __str__(self):
+        return '{} {}'.format(self.pname ,self.pznach)
+
+    pznach = models.BooleanField()
+    pname = models.CharField('Название', max_length=50)
+
