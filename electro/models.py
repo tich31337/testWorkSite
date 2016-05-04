@@ -40,6 +40,6 @@ class fltt(models.Model):
     def __str__(self):
         return '{} {}'.format(self.pname ,self.pznach)
 
-    pznach = models.BooleanField()
+    pznach = models.BooleanField(default = False)
     pname = models.CharField('Название', max_length=50)
 
