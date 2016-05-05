@@ -73,13 +73,17 @@ def electro2(request, date1 = datetime.today(), date2 = datetime.today()-timedel
     nameCount = pd.read_csv("electro/name2.csv", error_bad_lines=False, sep=';')
     # d2 = date(2015, 12,3)
     qwery2 = "SELECT ID_PP, (CAST(M as varchar(2)) + '/' + CAST(D as varchar(2)) + '/' + CAST(Y as varchar(4))) AS date, "\
-                +"(CAST(H as varchar(2))+':00') as time,  value FROM PP_hours WHERE " \
-                "Y >="+date2.strftime('%Y')+\
-                " AND M >="+date2.strftime('%m')+\
-                " AND D >="+date2.strftime('%d')+\
-                " AND Y <="+date1.strftime('%Y')+\
-                " AND M <="+date1.strftime('%m')+\
-                " AND D <="+date1.strftime('%d')
+             +"(CAST(H as varchar(2))+':00') as time,  value FROM PP_hours WHERE " \
+             + "CAST(CAST(M as varchar(2)) + '/' + CAST(D as varchar(2)) + '/' + CAST(Y as varchar(4)) AS date) >= " \
+             + "CAST('" + date2.strftime('%m/%d/%Y') + "' AS date) AND " \
+             + "CAST(CAST(M as varchar(2)) + '/' + CAST(D as varchar(2)) + '/' + CAST(Y as varchar(4)) AS date) <= " \
+             + "CAST('" + date1.strftime('%m/%d/%Y') + "' AS date); "
+                #                                        "Y >="+date2.strftime('%Y')+\
+                # " AND M >="+date2.strftime('%m')+\
+                # " AND D >="+date2.strftime('%d')+\
+                # " AND Y <="+date1.strftime('%Y')+\
+                # " AND M <="+date1.strftime('%m')+\
+                # " AND D <="+date1.strftime('%d')
     kt = pd.read_sql(qwery2, energosfera)
     kt.date = kt.date.apply(pd.to_datetime)
     kt = pd.merge(nameCount, kt, on='ID_PP')
