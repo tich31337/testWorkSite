@@ -41,5 +41,5 @@ class fltt(models.Model):
         return '{} {}'.format(self.pname ,self.pznach)
 
     pznach = models.BooleanField(default = False)
-    pname = models.CharField('Название', max_length=50)
+    pname = models.CharField('Название', max_length=50,unique = True)
 
