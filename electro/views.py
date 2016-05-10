@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
 import pandas as pd
-import pypyodbc as pyodbc
+# import pypyodbc as pyodbc
 import pymssql
 from datetime import datetime, timedelta
 

@@ -46,4 +46,5 @@ class MilLogin(models.Model):
     lUser = models.ForeignKey('MilestoneUser')
     lIP = models.ForeignKey('sysSec')
     lQuant = models.IntegerField()
-    lDate = models.DateField(default = date.today()-timedelta(1))
+    # lDate = models.DateField(default = date.today()-timedelta(1))
+    lDate = models.DateField()

@@ -2,7 +2,8 @@
 __author__ = 'tich'
 
 from django import template
-from django.utils.datastructures import SortedDict
+# from django.utils.datastructures import SortedDict
+from collections import OrderedDict
 
 register = template.Library()
 
@@ -11,7 +12,7 @@ register = template.Library()
 def listsort(value):
     if isinstance(value, dict):
         print('dict')
-        new_dict = SortedDict()
+        new_dict = OrderedDict()
         key_list = sorted(value.keys())
         for key in key_list:
             new_dict[key] = value[key]

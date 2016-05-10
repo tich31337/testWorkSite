@@ -1,9 +1,10 @@
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import s_fault, CustomUser, s_commit, s_drop_lift, s_system, s_fault_lift
+from .models import CustomUser
+from .models import s_fault, s_commit, s_drop_lift, s_system, s_fault_lift
 from .forms import s_faultForm, s_drop_liftForm, s_commitForm
 from django.contrib import auth
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.core.mail import send_mail
 from django.template import Context, loader
 from datetime import datetime, timedelta, date
@@ -50,7 +51,7 @@ def otchet_td(request, start_time = date.today() - timedelta(days = 10 + datetim
     args['stop_time'] = stop_time.strftime('%Y-%m-%dT%H:%M')
     args['fire'] = s_fault.objects.filter(fault_time__gte = start_time, fault_time__lte = stop_time, f_system = 1,)
     args['lifts'] = s_drop_lift.objects.filter(stop_lift__gte = start_time, stop_lift__lte = stop_time, fault_id = 1,)
-    # args['username'] = request.user.get_full_name()
+    args['username'] = request.user.get_full_name()
     fault_sys = s_system.objects.all()
     lift = s_fault_lift.objects.all()
     fault_count ={}
@@ -89,8 +90,11 @@ def logout(request):
 
 @login_required
 def newpost(request, postid = 0, liftid = 0):
-    com = s_commit.objects.order_by('-id')[0]  # получаем последний закоммиченный объект
     postid = int(postid)
+    try:
+        com = s_commit.objects.order_by('-id')[0]  # получаем последний закоммиченный объект
+    except :
+        postid = False
     args = {}
     args.update(csrf(request))
     # if request.GET:
@@ -136,7 +140,7 @@ def newpost(request, postid = 0, liftid = 0):
     args['faults'] = s_fault.objects.select_related().filter(pk__gt = com.s_fault_commit_id)
     args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt = com.s_lift_commit_id)
     args['commit_form'] = s_commitForm
-    # args['username'] = request.user.get_full_name()
+    args['username'] = request.user.get_full_name()
     return render_to_response('newpost.html', args, context_instance=RequestContext(request))
 
 
@@ -216,7 +220,8 @@ def newmail(request):
         s_fault_commit = s_fault.objects.order_by('-id')[0],
         s_lift_commit = s_drop_lift.objects.order_by('-id')[0],
         s_prim = args['prim'],
-        s_staff_commit = CustomUser.objects.get(username = request.user.username), )
+        s_staff_commit = CustomUser.objects.get(username = request.user.username),
+        )
     commit.save()
     return redirect('/accounts/logout/')
     # return HttpResponse('Ok')

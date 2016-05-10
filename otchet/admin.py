@@ -25,25 +25,27 @@ class CustomUserAdmin(UserAdmin):
             'fired',
             )}),
         (_('Permissions'), {'fields': (
-            'is_active', 
-            'is_staff', 
-            'is_superuser', 
-            'groups', 
+            'is_active',
+            'is_staff',
+            'is_superuser',
+            'groups',
             'user_permissions')}),
         (_('Important dates'), {'fields': (
-            'last_login', 
+            'last_login',
             'date_joined')}),
         )
     add_fieldsets = ((None, {'classes': ('wide',),
         'fields': (
             'username',
             'password1',
-            'password2', 
+            'password2',
             # 'p_num',
             )}),)
 
-# admin.site.unregister(User, UserAdmin)
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+admin.site.register(CustomUser)
+# admin.site.register(CustomUserAdmin)
 admin.site.register(s_group)
 admin.site.register(s_office)
 admin.site.register(s_timetable)

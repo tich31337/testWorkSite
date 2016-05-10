@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from .models import CustomUser, s_group, s_office, s_timetable, s_fault, s_drop_lift, s_commit
+from .models import CustomUser
+from .models import s_group, s_office, s_timetable, s_fault, s_drop_lift, s_commit
+
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from datetime import datetime
