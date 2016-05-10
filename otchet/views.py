@@ -91,10 +91,13 @@ def logout(request):
 @login_required
 def newpost(request, postid = 0, liftid = 0):
     postid = int(postid)
+    liftid = int(liftid)
     try:
-        com = s_commit.objects.order_by('-id')[0]  # получаем последний закоммиченный объект
-    except :
+        # com = s_commit.objects.order_by('-id')[0]  # получаем последний закоммиченный объект
+        com = s_commit.objects.last()  # получаем последний закоммиченный объект
+    except s_commit.DoesNotExist:
         postid = False
+        liftid = False
     args = {}
     args.update(csrf(request))
     # if request.GET:
@@ -119,7 +122,6 @@ def newpost(request, postid = 0, liftid = 0):
         args['form'] = s_faultForm
         args['buttonName'] = 'Добавить'
         args['postid'] = 0
-    liftid = int(liftid)
     if liftid:
         liftbd = get_object_or_404(s_drop_lift, pk = liftid)
         if liftid > com.s_lift_commit_id:
@@ -137,8 +139,11 @@ def newpost(request, postid = 0, liftid = 0):
         args['lift_form'] = s_drop_liftForm
         args['button_lift_name'] = 'Добавить'
         args['liftid'] = 0
-    args['faults'] = s_fault.objects.select_related().filter(pk__gt = com.s_fault_commit_id)
-    args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt = com.s_lift_commit_id)
+    try:
+        args['faults'] = s_fault.objects.select_related().filter(pk__gt = com.s_fault_commit_id)
+        args['lifts'] = s_drop_lift.objects.select_related().filter(pk__gt = com.s_lift_commit_id)
+    except:
+        pass
     args['commit_form'] = s_commitForm
     args['username'] = request.user.get_full_name()
     return render_to_response('newpost.html', args, context_instance=RequestContext(request))

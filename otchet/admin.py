@@ -43,9 +43,8 @@ class CustomUserAdmin(UserAdmin):
             )}),)
 
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
-admin.site.register(CustomUser)
-# admin.site.register(CustomUserAdmin)
+# admin.site.register(User, UserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(s_group)
 admin.site.register(s_office)
 admin.site.register(s_timetable)

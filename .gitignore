@@ -1,18 +1,13 @@
+/electro/2016 часовые.csv
 /worksite/settings.py
-/otchet/migrations/*
 /work_nginx.conf
 /db.sqlite3
 */migrations/
-*/migrations/*
-otchet/migrations/*
-otchet/migrations/
 */__pycashe__/
-*/__pycashe__
 /.uwsgi_plugins_builder
 *.pyc
 *.sublime*
 /.idea/
-/default
 /uwsgi_params
 /worksite_uwsgi.ini
 /worksite.sh
