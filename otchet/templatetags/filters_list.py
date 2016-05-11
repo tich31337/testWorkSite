@@ -10,22 +10,23 @@ register = template.Library()
 
 @register.filter(name='sort')
 def listsort(value):
+    listsort.is_safe = True
     if isinstance(value, dict):
-        print('dict')
-        new_dict = OrderedDict()
-        key_list = sorted(value.keys())
-        for key in key_list:
-            new_dict[key] = value[key]
-        print(new_dict)
-        return new_dict
+        # print('dict')
+        # new_dict = OrderedDict()
+        # key_list = sorted(value.keys())
+        # for key in key_list:
+        #     new_dict[key] = value[key]
+        # print(new_dict)
+        # return new_dict
+        return OrderedDict(value.items(), key=lambda t: t[0])
     elif isinstance(value, list):
-        print('list')
-        print(sorted(value))
+        # print('list')
+        # print(sorted(value))
         return sorted(value)
     else:
-        print('no dict')
-        print(value)
+        # print('no dict')
+        # print(value)
         return value
-    listsort.is_safe = True
 
 

@@ -80,8 +80,9 @@ class Command(BaseCommand):
         stop_vs = ['07', '08', '09', '10A', '10B', '11', '12', '13', '14', '15']
         delta_minus = timedelta(minutes = 20)
         delta_plus = timedelta(minutes = 4)
-        delta_arr_minus = timedelta(minutes = 5)  # 5
-        delta_arr_plus = timedelta(minutes = 15)
+        # delta_arr_minus = timedelta(minutes = 5)  # 5
+        # delta_arr_plus = timedelta(minutes = 15)
+        delta_dep_plan = timedelta(minutes = 45)
         time_now = datetime.now()
         arr1 = arr_f[(arr_f.num_stop.isin(stop_vs)) &
                      (arr_f.fact >= time_now - delta_minus) &
@@ -90,8 +91,10 @@ class Command(BaseCommand):
                      (dep_f.fact.isnull()) &  # не улетевшие
                      (((dep_f.pos_beg <= time_now + delta_plus) &  # начало посадки <= сейчас + 4 минуты и
                        (dep_f.pos_end >= time_now - delta_minus)) |  # окончание посадки >= сейчас - 20 минут или
-                      ((dep_f.reg_end >= time_now - delta_arr_minus) &  # время регистрации >= сейчас - 5 минут и
-                       (dep_f.reg_end < time_now + delta_arr_plus)))  # время регистрации < сейчас + 15 минут
+                      ((dep_f.plan <= time_now + delta_dep_plan) & # план вылета - 45 минут < сейчас и
+                       (dep_f.plan > time_now))) # план вылета > сейчас
+                      # ((dep_f.reg_end >= time_now - delta_arr_minus) &  # время регистрации >= сейчас - 5 минут и
+                      #  (dep_f.reg_end < time_now + delta_arr_plus)))  # время регистрации < сейчас + 15 минут
                      ]
         bFltt = fltt.objects.all()
         for s in stop_vs:
