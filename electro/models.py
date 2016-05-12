@@ -43,13 +43,7 @@ class fltt(models.Model):
     pznach = models.BooleanField(default = False)
     pname = models.CharField('Название', max_length=50,unique = True)
 
-class fltt_delay(models.Model):
 
-    class Meta:
-        verbose_name        = 'fltt задержка'
-        verbose_name_plural = 'fltt задержки'
-
-    fltt_delay_name = models.CharField('Название', max_length=50)
 
 
 
