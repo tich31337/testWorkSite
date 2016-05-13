@@ -33,11 +33,13 @@ class Command(BaseCommand):
             df1 = df1.append(df2, ignore_index = True)
 
         arr_f = df1
-
+        stop_vs2 = ['09', '10A', '10B']
         depB = df1[(df1.Terminal == 'B') & (df1.fact >= datetime.now() - timedelta(minutes = 40))]
         depA = df1[(df1.Terminal == 'A') & (df1.fact >= datetime.now() - timedelta(minutes = 20))]
+        depB3 = df1[(df1.num_stop.isin(stop_vs2)) & (df1.fact >= datetime.now() - timedelta(minutes = 40))]
         fltt.objects.update_or_create(pname = 'prilet_b', defaults = {'pznach': not depB.empty})
         fltt.objects.update_or_create(pname = 'prilet_a', defaults = {'pznach': not depA.empty})
+        fltt.objects.update_or_create(pname = 'prilet_b2', defaults = {'pznach': not depB3.empty})
 
         tree_depart = etree.fromstring(depart)
         dep_f = DataFrame(columns = ['Terminal', 'TWS', 'plan', 'fact', 'num_stop', 'pos_beg', 'pos_end', 'reg_end'])
