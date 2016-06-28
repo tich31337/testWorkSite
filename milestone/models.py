@@ -48,3 +48,34 @@ class MilLogin(models.Model):
     lQuant = models.IntegerField()
     # lDate = models.DateField(default = date.today()-timedelta(1))
     lDate = models.DateField()
+
+
+class MilCamera(models.Model):
+
+    class Meta:
+        verbose_name        = 'Камера'
+        verbose_name_plural = 'Камера'
+        permissions = (('can_read_ml', 'Может читать'),)
+        ordering = ('CameraName',)
+
+    def __str__(self):
+        return str(self.CameraName)
+
+    ipAddress = models.GenericIPAddressField(blank = True, null = True)
+    CameraName = models.CharField('Название', max_length=150)
+
+
+class MilLogin2(models.Model):
+
+    class Meta:
+        verbose_name        = 'Пользователь'
+        verbose_name_plural = 'Пользователь'
+        permissions = (('can_read_ml', 'Может читать'),)
+        ordering = ('mUser',)
+
+    def __str__(self):
+        return str(self.mUser)
+
+    mUser = models.CharField('Пользователь', max_length=50)
+    mCameras = models.ManyToManyField(MilCamera)
+    mDate = models.DateField()

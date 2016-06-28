@@ -5,13 +5,17 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect, Ht
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status, mixins, generics
+from .serializers import CameraSerializer
 
 # Необходимый параметр в settings
 # TEMPLATE_CONTEXT_PROCESSORS = (
 #     'django.core.context_processors.auth'
 # )
 
-from .models import MilestoneUser, MilLogin, sysSec
+from .models import MilestoneUser, MilLogin, sysSec, MilCamera, MilLogin2
 
 from datetime import datetime, timedelta
 import requests
@@ -83,3 +87,27 @@ def milestoneValid(request):
         return HttpResponse('err')
     return HttpResponse('Ok')
     # return redirect('/otchetbd/')
+
+@api_view(['POST',])
+def createCamera(request):
+    if request.method == 'POST':
+        try:
+            for d in request.data:
+                serializer = CameraSerializer(data = d)
+                print(serializer)
+                if serializer.is_valid():
+                    serializer.update()
+                    print("ok")
+                else:
+                    print('false', serializer.errors)
+            return Response(status = status.HTTP_201_CREATED)
+        except:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
+    if not request.data:
+        return Response(status = status.HTTP_204_NO_CONTENT)
+    return Response('bad',status = status.HTTP_404_NOT_FOUND)
+
+class updateCamera(mixins.UpdateModelMixin):
+
+    def post(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)

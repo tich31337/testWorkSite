@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
 from otchet.views   import *
-from milestone.views import milestoneOtchet, milestoneBD, milestoneValid
+from milestone.views import milestoneOtchet, milestoneBD, milestoneValid, createCamera
 from electro.views import electro2
 
 urlpatterns = [
@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^otchetbd/(?P<bdSort>\d{1})/$', milestoneBD),
     url(r'^otchetbd/', milestoneBD),
     url(r'^validip/$', milestoneValid),
+    url(r'^createcamera/$', createCamera),
     # отчет потребления электроэнергии
     url(r'^electro/$', electro2),
 ]
