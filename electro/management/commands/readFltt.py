@@ -113,5 +113,11 @@ class Command(BaseCommand):
 
         nakA = not dep_f[(dep_f.fact.isnull()) & (dep_f.reg_beg < time_now) & (dep_f.Terminal == 'A')].empty
         nakB = not dep_f[(dep_f.fact.isnull()) & (dep_f.reg_beg < time_now) & (dep_f.Terminal == 'B')].empty
-        fltt.objects.update_or_create(pname = 'nakopitel_A',  defaults={'pznach': nakA})
-        fltt.objects.update_or_create(pname = 'nakopitel_B',  defaults={'pznach': nakB})
+        regA = not dep_f[(dep_f.fact.isnull()) & (dep_f.reg_beg < time_now) & (dep_f.reg_end > time_now) & (
+        dep_f.Terminal == 'A')].empty
+        regB = not dep_f[(dep_f.fact.isnull()) & (dep_f.reg_beg < time_now) & (dep_f.reg_end > time_now) & (
+        dep_f.Terminal == 'B')].empty
+        fltt.objects.update_or_create(pname = 'nakopitel_A', defaults = {'pznach': nakA})
+        fltt.objects.update_or_create(pname = 'nakopitel_B', defaults = {'pznach': nakB})
+        fltt.objects.update_or_create(pname = 'registr_A', defaults = {'pznach': regA})
+        fltt.objects.update_or_create(pname = 'registr_B', defaults = {'pznach': regB})
