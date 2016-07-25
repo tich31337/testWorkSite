@@ -11,7 +11,7 @@ class Command(BaseCommand):
         arrive = urllib.request.urlopen('http://192.168.5.241/inx/fltt/ajax.php?arrive&1').read()
         depart = urllib.request.urlopen('http://192.168.5.241/inx/fltt/ajax.php?depart&1').read()
         tree = etree.fromstring(arrive)
-        df1 = DataFrame(columns = ['Terminal', 'TWS', 'plan', 'fact', 'num_stop'])
+        arrive1 = DataFrame(columns = ['Terminal', 'TWS', 'ap', 'plan', 'fact', 'num_stop'])
 
         for i in tree:
             dateflight = i.get('sort_1')
@@ -19,6 +19,7 @@ class Command(BaseCommand):
             time_fact = i.get('dt_fact')
             term = i.get('term')
             tws = i.get('tws')
+            ap = i.get('ap')
             num_stop = i.get('num_stop')
             try:
                 time_plan = datetime.strptime(dateflight + ' ' + time_plan, '%d-%b-%y %H:%M')
@@ -28,18 +29,22 @@ class Command(BaseCommand):
                 time_fact = datetime.strptime(dateflight + ' ' + time_fact, '%d-%b-%y %H:%M')
             except ValueError:
                 time_fact = None
-            df2 = DataFrame([[term, tws, time_plan, time_fact, num_stop]],
-                            columns = ['Terminal', 'TWS', 'plan', 'fact', 'num_stop'])
-            df1 = df1.append(df2, ignore_index = True)
+            arrive_temp = DataFrame([[term, tws, ap, time_plan, time_fact, num_stop]],
+                            columns = ['Terminal', 'TWS', 'ap', 'plan', 'fact', 'num_stop'])
+            arrive1 = arrive1.append(arrive_temp, ignore_index = True)
 
-        arr_f = df1
+        arr_f = arrive1
         stop_vs2 = ['09', '10A', '10B']
-        depB = df1[(df1.Terminal == 'B') & (df1.fact >= datetime.now() - timedelta(minutes = 40))]
-        depA = df1[(df1.Terminal == 'A') & (df1.fact >= datetime.now() - timedelta(minutes = 20))]
-        depB3 = df1[(df1.num_stop.isin(stop_vs2)) & (df1.fact >= datetime.now() - timedelta(minutes = 40))]
-        fltt.objects.update_or_create(pname = 'prilet_b', defaults = {'pznach': not depB.empty})
-        fltt.objects.update_or_create(pname = 'prilet_a', defaults = {'pznach': not depA.empty})
-        fltt.objects.update_or_create(pname = 'prilet_b2', defaults = {'pznach': not depB3.empty})
+        arrChurk = ['ТАШКЕНТ', 'ДУШАНБЕ', 'ОШ', 'ХУДЖАНТ'] # добавлены черные рейсы
+        arrB = arrive1[(arrive1.Terminal == 'B') & (arrive1.fact >= datetime.now() - timedelta(minutes = 40))]
+        # увеличить задержку до 120 минут для черных рейсов
+        arrB_churk = arrive1[(arrive1.Terminal == 'B') & (arrive1.ap.isin(arrChurk))
+                             & (arrive1.fact >= datetime.now() - timedelta(minutes = 120))]
+        arrA = arrive1[(arrive1.Terminal == 'A') & (arrive1.fact >= datetime.now() - timedelta(minutes = 20))]
+        arrB3 = arrive1[(arrive1.num_stop.isin(stop_vs2)) & (arrive1.fact >= datetime.now() - timedelta(minutes = 40))]
+        fltt.objects.update_or_create(pname = 'prilet_b', defaults = {'pznach': not arrB.empty or not arrB_churk.empty})
+        fltt.objects.update_or_create(pname = 'prilet_a', defaults = {'pznach': not arrA.empty})
+        fltt.objects.update_or_create(pname = 'prilet_b2', defaults = {'pznach': not arrB3.empty})
         time_now = datetime.now()
         tree_depart = etree.fromstring(depart)
         dep_f = DataFrame(columns = ['Terminal', 'TWS', 'plan', 'fact', 'num_stop', 'pos_beg', 'pos_end', 'reg_beg', 'reg_end'])
