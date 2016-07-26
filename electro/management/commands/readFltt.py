@@ -35,7 +35,7 @@ class Command(BaseCommand):
 
         arr_f = arrive1
         stop_vs2 = ['09', '10A', '10B']
-        arrChurk = ['ТАШКЕНТ', 'ДУШАНБЕ', 'ОШ', 'ХУДЖАНТ'] # добавлены черные рейсы
+        arrChurk = ['ТАШКЕНТ', 'ДУШАНБЕ', 'ОШ', 'ХУДЖАНТ', 'НАМАНГАН'] # добавлены черные рейсы
         arrB = arrive1[(arrive1.Terminal == 'B') & (arrive1.fact >= datetime.now() - timedelta(minutes = 40))]
         # увеличить задержку до 120 минут для черных рейсов
         arrB_churk = arrive1[(arrive1.Terminal == 'B') & (arrive1.ap.isin(arrChurk))
