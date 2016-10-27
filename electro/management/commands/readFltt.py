@@ -161,7 +161,8 @@ class Command(BaseCommand):
                         (dep_f.rasch <= time_now + delta_plus_2) &  # по плану за 60 минут до вылета и
                         (dep_f.rasch > time_now) # 20 минут после планового времени вылета на всякий случай
                         ]
-        print (dep_f[(dep_f.num_stop.isin(stop_vs))&(dep_f.rasch <= time_now + delta_plus_2) & (dep_f.rasch > time_now)])
+        # print (dep_f[(dep_f.num_stop.isin(stop_vs))&(dep_f.rasch <= time_now + delta_plus_2) & (dep_f.rasch > time_now)])
+        # print(arr_inf)
         for s in stop_vs:
             znach = not arr_inf[(arr_inf.num_stop == s)].empty or not dep_inf[(dep_inf.num_stop == s)].empty
             fltt.objects.update_or_create(pname = 'inf_park_' + s, defaults = {'pznach': znach})
